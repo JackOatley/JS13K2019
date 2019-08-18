@@ -14,5 +14,7 @@ Levels are procedurally generated. The difficulty of each level can be determine
 
 
 #### Physics:
-While in the air, the player is able to nose dive (by holding the Down Arrow). This allows them to gain speed, and is the only way to gain speed. The goal is to land as parallel as possible onto a slope, the player will then slide down the slope and up the next slope without loosing speed. Landing onto a slope at a perpendicular angle (or "head on") should cause the player to lose the level/a life.
+While in the air, the player is able to nose dive (by boosting while aiming down). This allows them to gain speed, and is the only way to gain maximum speed. The goal is to land as parallel as possible onto a slope, the player will then slide down the slope and up the next slope without loosing speed. Landing onto a slope at a perpendicular angle (or "head on") should cause the player to lose the level/a life.
 ![alt text](/images/hillmovement.png "Hill physics")
+In the air, the player has two modes;free fall and boost. Free fall physics are as follows: Going up reduces speed the most, going left/right reduces speed moderately, going down increases speed (up to some terminal velocity). When boosting, the player can gain a bit of speed in all the directions, scaled by the freefall variables (so boosting down will hit maximum speed). Boost is limited though, and has to be replenished by landing on the slopes, the better than landing, the better the boost refill.
+![alt text](/images/skymovement.png "Sky physics")
