@@ -1,16 +1,16 @@
 var fs = require('fs');
 var path = require('path');
 var exec = require('child_process').exec;
-
-cmd = "java -jar closure-compiler-v20190729.jar"
-	+ " --compilation_level ADVANCED"
-	+ " --language_in=ECMASCRIPT6"
-	+ " --language_out=ECMASCRIPT6"
-	+ " --rewrite_polyfills=false"
-	+ " --js `find ./src/ -name '*.js'`"
-	+ " --entry_point src/index"
-	+ " --js_output_file bin/index.html"
-	+ " --output_wrapper '<script>(function(){%output%})()</script>'";
+var slash = process.platform === "linux" ? "/" : "\\";
+cmd = `java -jar closure-compiler-v20190729.jar`
+	+ ` --compilation_level ADVANCED`
+	+ ` --language_in=ECMASCRIPT6`
+	+ ` --language_out=ECMASCRIPT6`
+	+ ` --rewrite_polyfills=false`
+	+ ` --js "src${slash}**.js"`
+	+ ` --entry_point src${slash}index`
+	+ ` --js_output_file bin${slash}index.html`
+	+ ` --output_wrapper "<script>(function(){%output%})()</script>"`;
 
 exec(cmd, function (error, stdout, stderr) {
 	console.log(stdout);
