@@ -1,1 +1,1 @@
-<script>(function(){'use strict';alert("Yo, boi!");console.log("test");})()</script>
+<canvas id='c'></canvas><script>(function(){'use strict';const a=document.getElementById("c");a.width=480;a.height=270;const b=a.getContext("2d",{alpha:!1});var c=performance.now();d(c);function d(e){requestAnimationFrame(d);var f=e-c;15.625<f&&(g+=f/10,b.clearRect(0,0,a.width,a.height),b.fillStyle="#FFFFFF",b.fillRect(g,100,20,20),c=e)}var g=0;})()</script>

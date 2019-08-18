@@ -10,7 +10,7 @@ cmd = `java -jar closure-compiler-v20190729.jar`
 	+ ` --js "src${slash}**.js"`
 	+ ` --entry_point src${slash}index`
 	+ ` --js_output_file bin${slash}index.html`
-	+ ` --output_wrapper "<script>(function(){%output%})()</script>"`;
+	+ ` --output_wrapper "<canvas id='c'></canvas><script>(function(){%output%})()</script>"`;
 
 exec(cmd, function (error, stdout, stderr) {
 	console.log(stdout);
