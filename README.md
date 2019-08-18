@@ -11,3 +11,7 @@ The basic game concept is a mix of Tiny Wings, Luftrausers and Robin Hood. The p
 
 #### Levels:
 Levels are procedurally generated. The difficulty of each level can be determined by the terrain, number of enemies, number of passive obstacles, availability and scarceness of boosts, and the time limit. The levels could wrap around, making them seamless: This would make it easier for the player to find/return to the start point, and could provide a graphical bonus in showing another part of the level as part of the background (a parallax layer).
+
+
+#### Physics:
+![alt text](/images/hillmovement.png "Hill physics")
