@@ -14,4 +14,5 @@ Levels are procedurally generated. The difficulty of each level can be determine
 
 
 #### Physics:
+While in the air, the player is able to nose dive (by holding the Down Arrow). This allows them to gain speed, and is the only way to gain speed. The goal is to land as parallel as possible onto a slope, the player will then slide down the slope and up the next slope without loosing speed. Landing onto a slope at a perpendicular angle (or "head on") should cause the player to lose the level/a life.
 ![alt text](/images/hillmovement.png "Hill physics")
