@@ -1,4 +1,6 @@
-import "./game.js";
+import * as game from "./game.js";
+import * as world from "./world.js";
+import "./dogemath.js";
 const Canvas = document.getElementById("c");
 Canvas.width = 480;
 Canvas.height = 270;
@@ -6,9 +8,9 @@ const ctx = Canvas.getContext("2d", {
 	alpha: false
 });
 
+world.init(Canvas.width, Canvas.height);
 
-var tickInterval = 1000 / 64;
-var sendTick = 0;
+var tickInterval = 1000 / 60;
 var lastTick = performance.now();
 tick(lastTick);
 
@@ -21,14 +23,14 @@ function tick(now) {
 		lastTick = now;
 	}
 }
-var posX = 0
 
 function update(dt) {
-	posX += 1 * dt;
+	world.update(dt);
+	game.update(dt);
 }
 
 function render() {
-	ctx.clearRect(0, 0, Canvas.width, Canvas.height);
-	ctx.fillStyle = "#FFFFFF";
-	ctx.fillRect(posX, 100, 20, 20);
+	ctx.fillStyle = "#e9c2c1";
+	ctx.fillRect(0, 0, Canvas.width, Canvas.height);
+	world.draw(ctx);
 }
