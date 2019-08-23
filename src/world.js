@@ -7,9 +7,9 @@ var midHeight = 50;
 var low = false;
 var lerpP = 0.0001;
 /**
- * 
- * @param {Number} _width 
- * @param {Number} _height 
+ *
+ * @param {Number} _width
+ * @param {Number} _height
  */
 function init(_width, _height) {
 	width = _width;
@@ -83,11 +83,13 @@ function lerpToPoint(start, target, func) {
 }
 
 /**
- * 
- * @param {Object} ctx 
+ *
+ * @param {Object} ctx
  */
 function draw(ctx) {
 	ctx.fillStyle = "#dd9e99";
+	ctx.strokeStyle = "#ffffff";
+	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(hills[0].x, height);
 	ctx.lineTo(hills[0].x, height / 2 - hills[0].y);
@@ -96,6 +98,7 @@ function draw(ctx) {
 	});
 	ctx.lineTo(width, height);
 	ctx.fill();
+	ctx.stroke();
 }
 
 export {
