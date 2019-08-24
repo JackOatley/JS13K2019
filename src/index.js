@@ -1,7 +1,7 @@
 import * as game from "./game.js";
 import * as world from "./world.js";
-import {currentPalette, toCSS} from "./palette.js";
-import {ctxCanvas, ctx} from "./renderer.js";
+import {currentPalette, toCSS, toGL} from "./palette.js";
+import {ctxCanvas, ctx, gl} from "./renderer.js";
 
 world.init(ctxCanvas.width, ctxCanvas.height);
 
@@ -31,7 +31,13 @@ function update(dt) {
 }
 
 function render() {
-	ctx.fillStyle = toCSS(currentPalette[1]);
-	ctx.fillRect(0, 0, ctxCanvas.width, ctxCanvas.height);
+
+	// Clear GL canvas. Typical background color.
+	gl.clearColor(...toGL(currentPalette[1]), 1);
+	gl.clear(gl.COLOR_BUFFER_BIT);
+
+	// Clear GUI canvas. Typical alpha=0.
+	ctx.clearRect(0, 0, ctxCanvas.width, ctxCanvas.height);
+
 	world.draw(ctx);
 }
