@@ -25,15 +25,13 @@ export class TextureAtlas {
 		this.canvas.height = this.height;
 		this.context = /**@type {CanvasRenderingContext2D}*/ (this.canvas.getContext("2d"));
 		this.lookupGrid = [];
-		this.fitSize = 1;
 		this.glTexture = null;
 		this.glIndex = 0;
-		this.useMipmapping = false;
 
 		// Setup lookupGrid.
-		for (var x=0; x<this.width/this.fitSize; x++) {
+		for (var x=0; x<this.width; x++) {
 			this.lookupGrid[x] = [];
-			for (var y=0; y<this.height/this.fitSize; y++) {
+			for (var y=0; y<this.height; y++) {
 				this.lookupGrid[x][y] = false;
 			}
 		}
@@ -67,14 +65,10 @@ export class TextureAtlas {
 		gl.bindTexture(gl.TEXTURE_2D, this.glTexture);
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
 		gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.canvas);
-		if (this.useMipmapping) {
-			gl.generateMipmap(gl.TEXTURE_2D);
-		} else {
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-			gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-		}
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
 	}
 
 	/**
@@ -85,15 +79,14 @@ export class TextureAtlas {
 
 		// Apply padding space.
 		const p = this.padding;			// Cache stuff.
-		const fs = this.fitSize;
 		const lw = this.width - p;		// Atlas padding/loop count.
 		const lh = this.height - p;
 		const iw = img.width + p;		// Sprite padding.
 		const ih = img.height + p;
 
 		// Find a free space.
-		for (var x=p; x<lw; x+=fs)
-		for (var y=p; y<lh; y+=fs) {
+		for (var x=p; x<lw; x++)
+		for (var y=p; y<lh; y++) {
 			if (this.isFree(x, y, iw, ih)) {
 				this.mark(x, y, iw, ih, true)
 				this.context.drawImage(img, x, y);
@@ -105,7 +98,7 @@ export class TextureAtlas {
 			}
 		}
 
-		console.warn("No texture space!");
+		// Well, this SHOULDN'T happen...
 		return null;
 
 	}
@@ -118,7 +111,6 @@ export class TextureAtlas {
 
 		// Apply padding space.
 		const p = this.padding;			// Cache stuff.
-		const fs = this.fitSize;
 		const lw = this.width - p;		// Atlas padding/loop count.
 		const lh = this.height - p;
 		const iw = sprite.width + p;		// Sprite padding.
@@ -148,10 +140,6 @@ export class TextureAtlas {
 	 * @return {boolean}
 	 */
 	isFree(x, y, w, h) {
-		x = ~~(x / this.fitSize);
-		y = ~~(y / this.fitSize);
-		w = Math.ceil(w / this.fitSize);
-		h = Math.ceil(h / this.fitSize);
 		for (var i=x; i<x+w; i++)
 		for (var j=y; j<y+h; j++) {
 			if (this.lookupGrid[i][j] !== false) {
@@ -172,10 +160,6 @@ export class TextureAtlas {
 	 * @return {void}
 	 */
 	mark(x, y, w, h, value) {
-		x = ~~(x / this.fitSize);
-		y = ~~(y / this.fitSize);
-		w = Math.ceil(w / this.fitSize);
-		h = Math.ceil(h / this.fitSize);
 		for (var i=x; i<x+w; i++)
 		for (var j=y; j<y+h; j++) {
 			this.lookupGrid[i][j] = value;
