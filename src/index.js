@@ -1,15 +1,9 @@
 import * as game from "./game.js";
 import * as world from "./world.js";
 import {currentPalette, toCSS} from "./palette.js";
+import {ctxCanvas, ctx} from "./renderer.js";
 
-const Canvas = document.getElementById("c");
-Canvas.width = 480;
-Canvas.height = 270;
-const ctx = Canvas.getContext("2d", {
-	alpha: false
-});
-
-world.init(Canvas.width, Canvas.height);
+world.init(ctxCanvas.width, ctxCanvas.height);
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
@@ -32,6 +26,6 @@ function update(dt) {
 
 function render() {
 	ctx.fillStyle = toCSS(currentPalette[1]);
-	ctx.fillRect(0, 0, Canvas.width, Canvas.height);
+	ctx.fillRect(0, 0, ctxCanvas.width, ctxCanvas.height);
 	world.draw(ctx);
 }
