@@ -1,12 +1,19 @@
 import * as DogeMath from "./dogemath.js";
-import {currentPalette, toCSS} from "./palette.js";
+import {
+	currentPalette,
+	toCSS
+} from "./palette.js";
 
 var hills = [];
 var width, height;
-var maxDist = 100;
-var midHeight = 0;
+
+var minHillDist = 100;
+var maxHillDist = 150;
+
+var minHillDiff = 10;
+var maxHillDiff = 50;
 var low = false;
-var lerpP = 4;
+var timeSteps = 10;
 /**
  *
  * @param {Number} _width
@@ -22,11 +29,12 @@ function init(_width, _height) {
  */
 function update(dt) {
 	if (hills.length == 0 || hills[hills.length - 1].x < width) {
-		// The ternary logic here needs parentheses, it otherwise wasn't working correctly.
-		var nh = DogeMath.randomRange(midHeight + (low ? -0 : 10), midHeight + (low ? -50 : 100));
+		var nh = DogeMath.randomRange(
+			(low ? -minHillDiff : minHillDiff),
+			(low ? -maxHillDiff : maxHillDiff));
 		low = !low;
 		addPoint(
-			width + maxDist,
+			width + DogeMath.randomRange(minHillDist, maxHillDist),
 			nh
 		);
 	}
@@ -34,7 +42,7 @@ function update(dt) {
 		i.x -= dt
 	});
 
-	while (hills[0].x < -lerpP) hills.shift();
+	while (hills[0].x < -timeSteps) hills.shift();
 }
 
 function addPoint(x, y) {
@@ -46,19 +54,19 @@ function addPoint(x, y) {
 
 		hills.push({
 			x: midX,
-			y: midY
+			y: midY,
+			c: true // only for debug, dont forget to remove
 		});
 
-		// FIX, if you see the debug lines, then you can see that this isn't
-		// linear interpolation, as this distances between points get smaller.
-		// THe distances should be uniform.
-		// NVM, I'm happy enough with my linear semi-fix, lol.
+		//Lerp left from Mid point
 		lerpToPoint({
 			x: midX,
 			y: midY
 		}, last, d => {
 			hills.splice(lastIndex + 1, 0, d);
 		});
+
+		//Kerp right from Mid point
 		lerpToPoint({
 			x: midX,
 			y: midY
@@ -73,30 +81,24 @@ function addPoint(x, y) {
 
 	hills.push({
 		x: x,
-		y: y
+		y: y,
+		c: true // only for debug, dont forget to remove
 	});
 }
 
 function lerpToPoint(start, target, func) {
-
-	// Do a dummy step to start. This prevent duplicate points.
-	const stepX = lerpP;
-	const stepY = stepX / 15;
-	start.x -= Math.sign(start.x - target.x) * stepX;
-	start.y += (target.y - start.y) * stepY;
-
-	// Then generate normally.
-	while (DogeMath.getDistance(start, target) >= lerpP) {
+	const timeStep = 1 / timeSteps;
+	const step = {
+		x: start.x,
+		y: start.y
+	};
+	for (var i = timeStep; i < 1 - timeStep; i += timeStep) {
+		step.x = DogeMath.lerp(start.x, target.x, i);
+		step.y = DogeMath.easeIn(start.y, target.y - start.y, i, 1);
 		func({
-			x: start.x,
-			y: start.y
+			x: step.x,
+			y: step.y
 		});
-		// start.x = DogeMath.eastIn(1, start.x, target.x - start.x, 100);
-		// start.y = DogeMath.eastIn(1, start.y, target.y - start.y, 50);
-		start.x -= Math.sign(start.x - target.x) * stepX;
-		start.y += (target.y - start.y) * stepY;
-		//start.x += DogeMath.lerp(start.x, target.x, 10);
-		//start.y += DogeMath.lerp(start.y, target.y, 5);
 	}
 }
 
@@ -127,7 +129,7 @@ function draw(ctx) {
 	ctx.moveTo(hills[0].x, height);
 	ctx.lineTo(hills[0].x, 270);
 	hills.forEach(i => {
-		ctx.moveTo(i.x, height / 2 - i.y);
+		ctx.moveTo(i.x, height / 2 - i.y - (i.c ? 10 : 0));
 		ctx.lineTo(i.x, 270);
 	});
 	ctx.lineWidth = 0.5;

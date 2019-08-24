@@ -1,11 +1,14 @@
-function lerp(value, target, ease) {
+function ease(value, target, ease) {
 	return (target - value) / ease;
 }
 
-function eastIn(t, b, c, d) {
-	return -c * (t /= d) * (t - 2) + b;
+function lerp(start, target, time) {
+	return target * time + start * (1 - time);
 }
 
+function easeIn(start, change, time, duration) {
+	return -change * (time / duration) * (time - 2) + start;
+}
 /**
  * Generates a random number between the specified range
  * @param {number} min
@@ -27,8 +30,9 @@ function getDistance(o1, o2) {
 
 export {
 	lerp,
+	ease,
+	easeIn,
 	randomRange,
 	getDistanceRaw,
-	getDistance,
-	eastIn
+	getDistance
 }
