@@ -20,6 +20,12 @@ function tick(now) {
 }
 
 function update(dt) {
+
+	// Dt safety. If dt is too big, skip execution.
+	if (dt > 10) {
+		return;
+	}
+
 	world.update(dt);
 	game.update(dt);
 }
