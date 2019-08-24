@@ -45,7 +45,7 @@ function render() {
 
 	// Actually draw stuff!
 	Sprite.batchStart();
-	sprite_sun.draw(0, 300, 80, 2, 2, [...currentPalette[2], 255]);
+	sprite_sun.draw(0, 300, 80, 1, 1, [...currentPalette[2], 255]);
 	world.draw(ctx);
 	Sprite.batchEnd();
 
