@@ -1,6 +1,7 @@
 import * as game from "./game.js";
 import * as world from "./world.js";
-import "./dogemath.js";
+import {currentPalette, toCSS} from "./palette.js";
+
 const Canvas = document.getElementById("c");
 Canvas.width = 480;
 Canvas.height = 270;
@@ -30,7 +31,7 @@ function update(dt) {
 }
 
 function render() {
-	ctx.fillStyle = "#e9c2c1";
+	ctx.fillStyle = toCSS(currentPalette[1]);
 	ctx.fillRect(0, 0, Canvas.width, Canvas.height);
 	world.draw(ctx);
 }

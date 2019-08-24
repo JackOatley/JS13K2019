@@ -15,4 +15,16 @@ export const palette = [
 		[119, 54, 112]
 	]
 
-]
+];
+
+/**
+ *
+ */
+export var currentPalette = palette[0];
+
+/**
+ * @param {Array} c Palette color.
+ */
+export function toCSS(c) {
+	return "rgb(" + c[0] + "," + c[1] + "," + c[2] + ")";
+}

@@ -1,4 +1,5 @@
 import * as DogeMath from "./dogemath.js";
+import {currentPalette, toCSS} from "./palette.js";
 
 var hills = [];
 var width, height;
@@ -87,8 +88,8 @@ function lerpToPoint(start, target, func) {
  * @param {Object} ctx
  */
 function draw(ctx) {
-	ctx.fillStyle = "#dd9e99";
-	ctx.strokeStyle = "#ffffff";
+	ctx.fillStyle = toCSS(currentPalette[2]);
+	ctx.strokeStyle = toCSS(currentPalette[0]);
 	ctx.lineWidth = 2;
 	ctx.beginPath();
 	ctx.moveTo(hills[0].x, height);
