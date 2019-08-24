@@ -2,7 +2,11 @@ import * as game from "./game.js";
 import * as world from "./world.js";
 import {currentPalette, toCSS, toGL} from "./palette.js";
 import {ctxCanvas, ctx, gl} from "./renderer.js";
+import {TextureAtlas} from "./texture_atlas.js";
+import {Sprite} from "./sprite.js";
+import {sprite_sun} from "./sprites/sprite_sun.js";
 
+Sprite.init();
 world.init(ctxCanvas.width, ctxCanvas.height);
 
 var tickInterval = 1000 / 60;
@@ -39,5 +43,10 @@ function render() {
 	// Clear GUI canvas. Typical alpha=0.
 	ctx.clearRect(0, 0, ctxCanvas.width, ctxCanvas.height);
 
+	// Actually draw stuff!
+	Sprite.batchStart();
+	sprite_sun.draw(0, 300, 80, 2, 2, [...currentPalette[2], 255]);
 	world.draw(ctx);
+	Sprite.batchEnd();
+
 }
