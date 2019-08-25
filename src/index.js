@@ -7,7 +7,7 @@ import {Sprite} from "./sprite.js";
 import {sprite_sun} from "./sprites/sprite_sun.js";
 
 Sprite.init();
-world.init(ctxCanvas.width, ctxCanvas.height);
+world.init(ctxCanvas.width, ctxCanvas.height, 5);
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
