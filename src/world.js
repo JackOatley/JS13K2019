@@ -62,9 +62,7 @@ function addPoint(x, y) {
 		lerpToPoint({
 			x: midX,
 			y: midY
-		}, last, d => {
-			hills.splice(lastIndex + 1, 0, d);
-		});
+		}, last, d => hills.splice(lastIndex + 1, 0, d));
 
 		//Kerp right from Mid point
 		lerpToPoint({
@@ -73,9 +71,7 @@ function addPoint(x, y) {
 		}, {
 			x: x,
 			y: y
-		}, d => {
-			hills.push(d);
-		});
+		}, d => hills.push(d));
 
 	}
 
