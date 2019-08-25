@@ -6,43 +6,49 @@ import {
 
 var hills = [];
 var width, height;
+var x = 0;
 
 var minHillDist = 100;
 var maxHillDist = 150;
 
 var minHillDiff = 10;
 var maxHillDiff = 50;
-var low = false;
+
 var timeSteps = 10;
 /**
  *
  * @param {Number} _width
  * @param {Number} _height
+ * @param {Number}	numberOfHills
  */
-function init(_width, _height) {
+function init(_width, _height, numberOfHills) {
 	width = _width;
 	height = _height;
+	generateWorld(numberOfHills || 20);
+}
+
+function generateWorld(num) {
+	var last = {
+		x: -maxHillDist,
+		y: 0
+	};
+	var low = true;
+	while (num--) {
+		last.x = last.x + DogeMath.randomRange(minHillDist, maxHillDist);
+		last.y = DogeMath.randomRange(
+			(low ? -minHillDiff : minHillDiff),
+			(low ? -maxHillDiff : maxHillDiff));
+		addPoint(last.x, last.y);
+		low = !low;
+	}
 }
 
 /**
  * @param {Number} dt DeltaTime
  */
 function update(dt) {
-	if (hills.length == 0 || hills[hills.length - 1].x < width) {
-		var nh = DogeMath.randomRange(
-			(low ? -minHillDiff : minHillDiff),
-			(low ? -maxHillDiff : maxHillDiff));
-		low = !low;
-		addPoint(
-			width + DogeMath.randomRange(minHillDist, maxHillDist),
-			nh
-		);
-	}
-	hills.forEach(i => {
-		i.x -= dt
-	});
-
-	while (hills[0].x < -timeSteps) hills.shift();
+	x -= dt;
+	if (x <= -timeSteps * hills.length) x = 0;
 }
 
 function addPoint(x, y) {
@@ -107,12 +113,12 @@ function draw(ctx) {
 	// Draw fill.
 	ctx.fillStyle = toCSS(currentPalette[2]);
 	ctx.beginPath();
-	ctx.moveTo(hills[0].x, height);
-	ctx.lineTo(hills[0].x, height / 2 - hills[0].y);
+	ctx.moveTo(0, height);
 	hills.forEach(i => {
-		ctx.lineTo(i.x, height / 2 - i.y);
+		if (i.x + x < -timeSteps || i.x + x > width) return;
+		ctx.lineTo(i.x + x, height / 2 - i.y);
 	});
-	ctx.lineTo(width, height);
+	ctx.lineTo(width + x, height);
 	ctx.fill();
 
 	// Draw outline.

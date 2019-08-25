@@ -9,7 +9,7 @@ import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
 import {spriteRobinVertical} from "./sprites/robin_vertical.js";
 
 Sprite.init();
-world.init(ctxCanvas.width, ctxCanvas.height);
+world.init(ctxCanvas.width, ctxCanvas.height, 5);
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
