@@ -30,7 +30,7 @@ export const spriteShader = {
 
 		void main() {
 			vec4 tex = texture2D(uSpriteTexture, vTextureCoord);
-			if (floor(tex.a) > 0.0) {
+			if (floor(tex.r) > 0.0) {
 				gl_FragColor = vColor;
 			}
 		}

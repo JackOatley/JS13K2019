@@ -24,6 +24,8 @@ export class TextureAtlas {
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
 		this.context = /**@type {CanvasRenderingContext2D}*/ (this.canvas.getContext("2d"));
+		this.context.fillStyle = "black";
+		this.context.fillRect(0, 0, this.width, this.height);
 		this.lookupGrid = [];
 		this.glTexture = null;
 		this.glIndex = 0;
@@ -90,6 +92,11 @@ export class TextureAtlas {
 			if (this.isFree(x, y, iw, ih)) {
 				this.mark(x, y, iw, ih, true)
 				this.context.drawImage(img, x, y);
+
+				// Move this to only execute once.
+				this.bind(0);
+				this.upload();
+
 				return {
 					c: this.canvas,
 					x: x,
