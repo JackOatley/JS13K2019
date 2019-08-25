@@ -23,14 +23,19 @@ export class Sprite {
 	constructor(img, xOffset, yOffset) {
 
 		//
-		this.width = img.width;
-		this.height = img.height;
+		this.width = 0;
+		this.height = 0;
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.frames = [];
 		this.isLoaded = false;
-		this.addFrame(img, 0);
 		instances.push(this);
+
+		if (img) {
+			this.width = img.width;
+			this.height = img.height;
+			this.addFrame(img, 0);
+		}
 
 	}
 
@@ -100,6 +105,10 @@ export class Sprite {
 		// TODO: store these as UV coords in the first place.
 		var l = this.frames.length;
 		var frame = this.frames[((index % l) + l) % l];
+
+		if (!frame) {
+			return;
+		}
 
 		var uvx1 = frame.x / Sprite.atlas.width;
 		var uvy1 = frame.y / Sprite.atlas.height;
@@ -260,3 +269,33 @@ Sprite.texture = null;
 Sprite.glBatchArrayQuads = new Float32Array(MAX_SPRITES*12);
 Sprite.glBatchArrayQuadsTex = new Float32Array(MAX_SPRITES*12);
 Sprite.glColorsBuffer = new Uint8Array(MAX_SPRITES*24);
+
+/**
+ * Temporary solution to creating a Sprite from a base64 encoded PNG.
+ * @const
+ */
+export class SpriteBase64 extends Sprite {
+
+	constructor(str, xOffset, yOffset) {
+
+		super(null, xOffset, yOffset);
+		this.width = 0;
+		this.height = 0;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.frames = [];
+		this.isLoaded = false;
+		instances.push(this);
+
+		var image = new Image();
+		image.onload = () => {
+			console.log("Yo");
+			this.width = image.width;
+			this.height = image.height;
+			this.addFrame(image, 0);
+		}
+		image.src = "data:image/png;base64," + str;
+
+	}
+
+}

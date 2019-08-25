@@ -7,6 +7,7 @@ import {Sprite} from "./sprite.js";
 import {sprite_sun} from "./sprites/sprite_sun.js";
 import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
 import {spriteRobinVertical} from "./sprites/robin_vertical.js";
+import {spriteTree1} from "./sprites/tree_1.js";
 
 Sprite.init();
 world.init(ctxCanvas.width, ctxCanvas.height, 5);
@@ -50,6 +51,7 @@ function render() {
 	sprite_sun.draw(0, 300, 80, 1, 1, 0, [...currentPalette[2], 255]);
 	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
 	spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
+	spriteTree1.draw(0, 150, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
 	world.draw(ctx);
 	Sprite.batchEnd();
 
