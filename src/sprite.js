@@ -64,17 +64,22 @@ export class Sprite {
 	 * @param {number} index
 	 * @param {number} x
 	 * @param {number} y
-	 * @param {number=} xScale
-	 * @param {number=} yScale
-	 * @param {Array<number>=} color
+	 * @param {number} xScale
+	 * @param {number} yScale
+	 * @param {number} rotation
+	 * @param {Array<number>} color
 	 * @return {void}
 	 */
-	draw(index, x, y, xScale=1, yScale=1, color=[255,255,255,255]) {
+	draw(index, x, y, xScale, yScale, rotation, color) {
+
+		worldMatrix.save();
+		worldMatrix.translate(x, y, 0);
+		worldMatrix.rotate(rotation, 0, 0, 1);
 
 		// Get positions of the 4 vertices of the quad.
 		// 1: top-left, 2: top-right, 3: bottom-right, 4: bottom-left.
-		var x1 = x - this.xOffset * xScale;
-		var y1 = y - this.yOffset * yScale;
+		var x1 = 0 - this.xOffset * xScale;
+		var y1 = 0 - this.yOffset * yScale;
 		var x2 = x1;
 		var y2 = y1 + this.height * yScale;
 		var x3 = x1 + this.width * xScale;
@@ -87,6 +92,9 @@ export class Sprite {
 		[x2, y2] = worldMatrix.transposeTransformPoint(x2, y2, 0, 1);
 		[x3, y3] = worldMatrix.transposeTransformPoint(x3, y3, 0, 1);
 		[x4, y4] = worldMatrix.transposeTransformPoint(x4, y4, 0, 1);
+
+		//
+		worldMatrix.restore();
 
 		// Get texture coordinates.
 		// TODO: store these as UV coords in the first place.

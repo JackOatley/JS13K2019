@@ -6,6 +6,7 @@ import {TextureAtlas} from "./texture_atlas.js";
 import {Sprite} from "./sprite.js";
 import {sprite_sun} from "./sprites/sprite_sun.js";
 import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
+import {spriteRobinVertical} from "./sprites/robin_vertical.js";
 
 Sprite.init();
 world.init(ctxCanvas.width, ctxCanvas.height);
@@ -46,12 +47,9 @@ function render() {
 
 	// Actually draw stuff!
 	Sprite.batchStart();
-	sprite_sun.draw(0, 300, 80, 1, 1, [...currentPalette[2], 255]);
-	worldMatrix.save();
-	worldMatrix.translate(50, 50, 0);
-	worldMatrix.rotate(performance.now() / 200, 0, 0, 1);
-	spriteRobinHorizontal.draw(0, 0, 0, 1, 1, [...currentPalette[3], 255]);
-	worldMatrix.restore();
+	sprite_sun.draw(0, 300, 80, 1, 1, 0, [...currentPalette[2], 255]);
+	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
+	spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
 	world.draw(ctx);
 	Sprite.batchEnd();
 
