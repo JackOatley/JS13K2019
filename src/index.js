@@ -5,6 +5,7 @@ import {ctxCanvas, ctx, gl} from "./renderer.js";
 import {TextureAtlas} from "./texture_atlas.js";
 import {Sprite} from "./sprite.js";
 import {sprite_sun} from "./sprites/sprite_sun.js";
+import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
 
 Sprite.init();
 world.init(ctxCanvas.width, ctxCanvas.height);
@@ -46,6 +47,7 @@ function render() {
 	// Actually draw stuff!
 	Sprite.batchStart();
 	sprite_sun.draw(0, 300, 80, 1, 1, [...currentPalette[2], 255]);
+	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, [...currentPalette[3], 255]);
 	world.draw(ctx);
 	Sprite.batchEnd();
 

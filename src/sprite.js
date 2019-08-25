@@ -16,26 +16,26 @@ var spriteShaderProgram = null,
 export class Sprite {
 
 	/**
-	 * @param {HTMLCanvasElement} img
+	 * @param {Image|HTMLCanvasElement} img
 	 * @param {number} xOffset
 	 * @param {number} yOffset
 	 */
-	constructor(canvas, xOffset, yOffset) {
+	constructor(img, xOffset, yOffset) {
 
 		//
-		this.width = canvas.width;
-		this.height = canvas.height;
+		this.width = img.width;
+		this.height = img.height;
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		this.frames = [];
 		this.isLoaded = false;
-		this.addFrame(canvas, 0);
+		this.addFrame(img, 0);
 		instances.push(this);
 
 	}
 
 	/**
-	 * @param {Image} img
+	 * @param {Image|HTMLCanvasElement} img
 	 * @param {number} frame
 	 * @return {void}
 	 */
