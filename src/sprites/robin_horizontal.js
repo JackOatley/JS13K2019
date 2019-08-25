@@ -1,6 +1,6 @@
 import {Sprite} from "../sprite.js";
 
-export var spriteRobinHorizontal = new Image();
+export var spriteRobinHorizontal = /** @type {!Image} */ (new Image());
 spriteRobinHorizontal.onload = function() {
 	spriteRobinHorizontal = new Sprite(spriteRobinHorizontal, 16, 9);
 	console.log("Loaded spriteRobinHorizontal!");

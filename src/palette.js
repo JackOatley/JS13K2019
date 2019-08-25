@@ -32,7 +32,7 @@ export function toCSS(c) {
 
 /**
  * @param {Array} c Palette color.
- * @return {Array} 3-value array with 0.0-1.0 values.
+ * @return {!Array} 3-value array with 0.0-1.0 values.
  */
 export function toGL(c) {
 	return [c[0]/255, c[1]/255, c[2]/255];

@@ -1,6 +1,6 @@
 import {Sprite} from "../sprite.js";
 
-export var spriteRobinVertical = new Image();
+export var spriteRobinVertical = /** @type {?Image} */ (new Image());
 spriteRobinVertical.onload = function() {
 	spriteRobinVertical = new Sprite(spriteRobinVertical, 16, 9);
 	console.log("Loaded spriteRobinVertical!");

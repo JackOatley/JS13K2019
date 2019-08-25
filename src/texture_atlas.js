@@ -41,7 +41,6 @@ export class TextureAtlas {
 	}
 
 	/**
-	 * @param {WebGLRenderingContext} gl
 	 * @return {void}
 	 */
 	createGLTexture() {
@@ -60,7 +59,6 @@ export class TextureAtlas {
 
 	/**
 	 * Upload canvas data to GL Texture.
-	 * @param {WebGLRenderingContext} gl
 	 * @return {void}
 	 */
 	upload() {

@@ -1,4 +1,7 @@
-function update() {
+/**
+ * @param {number} dt
+ */
+function update(dt) {
 
 }
 

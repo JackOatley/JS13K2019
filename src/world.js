@@ -5,7 +5,7 @@ import {
 } from "./palette.js";
 
 var hills = [];
-var width, height;
+var width = 0, height = 0;
 var x = 0;
 
 var minHillDist = 100;
@@ -17,9 +17,9 @@ var maxHillDiff = 50;
 var timeSteps = 10;
 /**
  *
- * @param {Number} _width
- * @param {Number} _height
- * @param {Number}	numberOfHills
+ * @param {number} _width
+ * @param {number} _height
+ * @param {number}	numberOfHills
  */
 function init(_width, _height, numberOfHills) {
 	width = _width;
@@ -44,7 +44,7 @@ function generateWorld(num) {
 }
 
 /**
- * @param {Number} dt DeltaTime
+ * @param {number} dt DeltaTime
  */
 function update(dt) {
 	x -= dt;

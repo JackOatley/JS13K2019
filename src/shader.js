@@ -1,6 +1,3 @@
-/**@typedef {{vertex: string, fragment: string}}*/
-var ShaderSource;
-
 /**
  * @struct
  */

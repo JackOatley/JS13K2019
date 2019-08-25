@@ -1,6 +1,6 @@
 import {Sprite} from "../sprite.js";
 
-const canv = document.createElement("canvas");
+const canv = /** @type {!HTMLCanvasElement} */ (document.createElement("canvas"));
 canv.width = 120;
 canv.height = 120;
 

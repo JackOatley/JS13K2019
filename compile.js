@@ -3,6 +3,7 @@ var path = require('path');
 var exec = require('child_process').exec;
 var slash = process.platform === "linux" ? "/" : "\\";
 cmd = `java -jar closure-compiler-v20190729.jar`
+	+ ` --externs src${slash}externs.jsx`
 	+ ` --compilation_level ADVANCED`
 	+ ` --language_in=ECMASCRIPT6`
 	+ ` --language_out=ECMASCRIPT6`
