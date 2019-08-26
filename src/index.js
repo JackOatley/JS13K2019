@@ -1,5 +1,6 @@
 import * as game from "./game.js";
 import * as world from "./world.js";
+import * as keyboard from "./keyboard.js";
 import {currentPalette, toCSS, toGL} from "./palette.js";
 import {ctxCanvas, ctx, gl, worldMatrix} from "./renderer.js";
 import {TextureAtlas} from "./texture_atlas.js";
@@ -10,8 +11,9 @@ import {spriteRobinVertical} from "./sprites/robin_vertical.js";
 import {spriteTree1} from "./sprites/tree_1.js";
 import {spriteHouse} from "./sprites/house.js";
 
+keyboard.init();
 Sprite.init();
-world.init(ctxCanvas.width, ctxCanvas.height, 5);
+world.init(ctxCanvas.width, ctxCanvas.height, 10);
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
@@ -36,6 +38,8 @@ function update(dt) {
 
 	world.update(dt);
 	game.update(dt);
+	keyboard.update();
+
 }
 
 function render() {

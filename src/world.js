@@ -1,3 +1,4 @@
+import {any} from "./keyboard.js";
 import * as DogeMath from "./dogemath.js";
 import {
 	currentPalette,
@@ -47,7 +48,11 @@ function generateWorld(num) {
  * @param {number} dt DeltaTime
  */
 function update(dt) {
-	x -= dt;
+
+	//x -= dt;
+	if (any("ARROWLEFT")) { x -= 10; }
+	if (any("ARROWRIGHT")) { x += 10; }
+
 	if (x <= -timeSteps * hills.length) x = 0;
 }
 
@@ -113,17 +118,42 @@ function draw(ctx) {
 	// Draw fill.
 	ctx.fillStyle = toCSS(currentPalette[2]);
 	ctx.beginPath();
-	ctx.moveTo(0, height);
-	hills.forEach(i => {
-		if (i.x + x < -timeSteps || i.x + x > width) return;
+	var i, next, nx;
+	for (var n=0; n<hills.length; n++) {
+		i = hills[n];
+		if (n === hills.length-1) {
+			next = hills[0];
+			nx = i.x + 100;		// Need a way to get this number.
+		} else {
+			next = hills[n+1];
+			nx = next.x;
+		}
+		ctx.moveTo(i.x + x, height);
 		ctx.lineTo(i.x + x, height / 2 - i.y);
-	});
-	ctx.lineTo(width + x, height);
+		ctx.lineTo(nx + x, height / 2 - next.y);
+		ctx.lineTo(nx + x, height);
+	}
 	ctx.fill();
 
 	// Draw outline.
 	ctx.strokeStyle = toCSS(currentPalette[0]);
 	ctx.lineWidth = 2;
+	ctx.beginPath();
+	var i, next, nx;
+	for (var n=0; n<hills.length; n++) {
+		i = hills[n];
+		if (n === hills.length-1) {
+			next = hills[0];
+			nx = i.x + 100;		// Need a way to get this number.
+		} else {
+			next = hills[n+1];
+			nx = next.x;
+		}
+		//ctx.moveTo(i.x + x, height);
+		ctx.moveTo(i.x + x, height / 2 - i.y);
+		ctx.lineTo(nx + x, height / 2 - next.y);
+		//ctx.lineTo(nx + x, height);
+	}
 	ctx.stroke();
 
 	// Draw debug.

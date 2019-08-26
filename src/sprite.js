@@ -289,7 +289,6 @@ export class SpriteBase64 extends Sprite {
 
 		var image = new Image();
 		image.onload = () => {
-			console.log("Yo");
 			this.width = image.width;
 			this.height = image.height;
 			this.addFrame(image, 0);
