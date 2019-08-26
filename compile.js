@@ -1,5 +1,3 @@
-var fs = require('fs');
-var path = require('path');
 var exec = require('child_process').exec;
 var slash = process.platform === "linux" ? "/" : "\\";
 cmd = `java -jar closure-compiler-v20190729.jar`
