@@ -1,7 +1,7 @@
 import * as game from "./game.js";
 import * as world from "./world.js";
 import * as keyboard from "./keyboard.js";
-import {currentPalette, toCSS, toGL} from "./palette.js";
+import {nextPalette, currentPalette, toCSS, toGL} from "./palette.js";
 import {ctxCanvas, ctx, gl, worldMatrix} from "./renderer.js";
 import {TextureAtlas} from "./texture_atlas.js";
 import {Sprite} from "./sprite.js";
@@ -34,6 +34,11 @@ function update(dt) {
 	// Dt safety. If dt is too big, skip execution.
 	if (dt > 10) {
 		return;
+	}
+
+	// Palette swapping.
+	if (keyboard.pressed("Q")) {
+		nextPalette();
 	}
 
 	world.update(dt);
