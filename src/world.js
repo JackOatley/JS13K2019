@@ -158,15 +158,15 @@ function draw(ctx) {
 
 	// Draw debug.
 	ctx.beginPath();
-	ctx.moveTo(hills[0].x, height);
-	ctx.lineTo(hills[0].x, 270);
+	ctx.moveTo(hills[0].x + x, height);
+	ctx.lineTo(hills[0].x + x, 270);
 	hills.forEach(i => {
-		ctx.moveTo(i.x, height / 2 - i.y - (i.c ? 10 : 0));
-		ctx.lineTo(i.x, 270);
+		ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0));
+		ctx.lineTo(i.x + x, 270);
 	});
 	ctx.lineWidth = 0.5;
 	ctx.strokeStyle = "rgb(0,0,0,100)";
-	//ctx.stroke();
+	ctx.stroke();
 
 }
 
