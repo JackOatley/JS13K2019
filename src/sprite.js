@@ -157,6 +157,15 @@ export class Sprite {
 	}
 
 	/**
+	 *
+	 */
+	static triangle() {
+
+		Sprite.glBatchIndexQuads += 6;
+
+	}
+
+	/**
 	 * @return {void}
 	 */
 	static batchStart() {

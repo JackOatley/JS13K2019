@@ -10,6 +10,8 @@ import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
 import {spriteRobinVertical} from "./sprites/robin_vertical.js";
 import {spriteTree1} from "./sprites/tree_1.js";
 import {spriteHouse} from "./sprites/house.js";
+import {spriteBoostBar} from "./sprites/boost_bar.js";
+import {spriteBoostPip} from "./sprites/boost_pip.js";
 
 keyboard.init();
 Sprite.init();
@@ -64,6 +66,23 @@ function render() {
 	spriteTree1.draw(0, 150, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
 	spriteHouse.draw(0, 200, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
 	world.draw(ctx);
+	drawGui();
 	Sprite.batchEnd();
+
+}
+
+/**
+ * Draws the GUI, duh!
+ * @return {void}
+ */
+function drawGui() {
+
+	// Boost bar.
+	spriteBoostBar.draw(0, 4, 4, 1, 1, 0, [...currentPalette[3], 255]);
+	var fill = 6;	// Replace this with actual boost value, out of 10.
+	for (var n=0; n<10; n++) {
+		var c = (n < fill) ? 0 : 3;
+		spriteBoostPip.draw(0, 8+n*12, 8, 1, 1, 0, [...currentPalette[c], 255]);
+	}
 
 }

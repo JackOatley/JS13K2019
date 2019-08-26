@@ -1,5 +1,0 @@
-export const spriteSheet = new Image(128, 128);
-spriteSheet.onload = function() {
-	console.log("loaded sprite!");
-}
-spriteSheet.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACAAQMAAAD58POIAAAABlBMVEUAAAD///+l2Z/dAAAACXBIWXMAAAsSAAALEgHS3X78AAAA5UlEQVRIx+3SMQ6CQBAF0EEKOmktTGjsvIIJHMXK0iMAVt7KYDyApe1aWdiQWEiBfNcGZmZNlMLChEmWwMvmQ/5C5I5fEk04BBXRgkNYK4gspByyRoIHEIFnAocztkUXAVxuOJo2AWh8AO2OGKhtDHIWUYkd9qG0CMNCjdhBIXKRQf6OJASkYGzXFafu06d2JRip1u66xhW7X76FtQbeafm6pBpmGnjHlQtBriAy4qhryioJHhoJPiB+hibg7XwDIVRGCPUWByJs+kKMvYZC9uFABtMX5o/kQ+vOufwGhhlmmGH+e54wM5KB3QgkvQAAAABJRU5ErkJggg==";
