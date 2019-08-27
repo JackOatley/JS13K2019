@@ -186,9 +186,9 @@ function draw(ctx) {
 	var i = 0;
 	var next = hills[i];
 	var dir = 1;
-	ctx.moveTo(next.x + x, height / 2 - next.y);
+	var loop = -1;
+	ctx.moveTo(next.x + x + (loop * hillWidth), height / 2 - next.y);
 	i++;
-	var loop = 0;
 	while (next !== undefined) {
 		var nx = next.x + x + (loop * hillWidth);
 		if (nx > width) break;
