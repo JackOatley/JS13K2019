@@ -11,6 +11,7 @@ var drawDebug = true;
 
 var hills = [];
 var hillWidth;
+var midPoints;
 var width = 0,
 	height = 0;
 var x = 0;
@@ -51,7 +52,8 @@ function generateWorld(num) {
 	}
 	addPoint(last.x + maxHillDist * timeSteps, 0);
 	hillWidth = hills[hills.length - 1].x;
-	console.log(hillWidth);
+	midPoints = ~~(hills.length / timeSteps);
+	console.log(midPoints);
 }
 
 /**
@@ -61,10 +63,10 @@ function update(dt) {
 
 	//x -= dt;
 	if (any("ARROWLEFT")) {
-		x -= 10;
+		x -= 5;
 	}
 	if (any("ARROWRIGHT")) {
-		x += 10;
+		x += 5;
 	}
 
 	if (x <= -hillWidth) x = 0;
@@ -82,7 +84,6 @@ function addPoint(x, y) {
 			y: midY,
 			c: true // only for debug, dont forget to remove
 		});
-
 		//Lerp left from Mid point
 		lerpToPoint({
 			x: midX,
@@ -190,45 +191,65 @@ function draw(ctx) {
 
 	// Draw debug.
 	if (drawDebug) {
-		// ctx.beginPath();
-		// ctx.moveTo(hills[0].x + x, height);
-		// ctx.lineTo(hills[0].x + x, 270);
-		// hills.forEach(i => {
-		// 	ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0));
-		// 	ctx.lineTo(i.x + x, 270);
-		// });
-		var i = collide(50);
+		ctx.beginPath();
+		ctx.moveTo(hills[0].x + x, height);
+		ctx.lineTo(hills[0].x + x, 270);
+		hills.forEach(i => {
+			ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0));
+			ctx.lineTo(i.x + x, 270);
+		});
+		ctx.lineWidth = 0.5;
+		ctx.strokeStyle = "rgb(0,0,0,100)";
+		ctx.stroke();
+
+		var i = findIndex(150);
 		if (i >= 0) {
 			ctx.beginPath();
 			ctx.moveTo(hills[i].x + x, height / 2 - hills[i].y);
 			ctx.lineTo(hills[i].x + x, 270);
 
 			ctx.lineWidth = 0.5;
-			ctx.strokeStyle = "rgb(0,0,0,100)";
+			ctx.strokeStyle = "rgb(255,0,0,100)";
 			ctx.stroke();
 		}
 	}
 
 }
 
-function collide(posX) {
-	var mids = hillWidth / timeSteps;
-	var mid = ~~((posX - x) / mids);
-	var nextMid = mid + 10;
-	var newStep = 10;
-	if (hills[mid] !== undefined && hills[nextMid] !== undefined) {
-		newStep = (hills[nextMid].x - hills[mid].x) / timeSteps;
-	}
-	var nx = ~~((posX - x) / newStep);
-	var step = hills[nx];
-	if (step === undefined) {
-		console.log(mid, nextMid, nx);
-		return -1;
-	}
-	return ~~nx;
+/**
+ * Finds the index of the closest Segment to the specified posX value
+ * @param {number} posX 
+ */
+function findIndex(posX) {
+	//approximate position.
+	var nx = posX - x;
+	var approx = ~~(nx / (hillWidth / midPoints)) * timeSteps;
+	//step until you hit the closest point.
+	while (hills[approx] !== undefined && hills[approx].x > nx) approx--;
+	while (hills[approx] !== undefined && hills[approx].x < nx) approx++;
+	if (hills[approx] === undefined) return -1;
+	return approx;
 }
+
+function getHill(index) {
+	return {
+		x: hills[index].x,
+		y: hills[index].y
+	};
+}
+
+function getAngle(index) {
+	var hill = hills[index];
+	var nextHill = hills[index + 1];
+	if (hill === undefined || nextHill === undefined) return 0;
+	return DogeMath.getAngle(hill, nextHill);
+}
+
 export {
 	init,
 	update,
-	draw
+	draw,
+	findIndex,
+	getHill,
+	getAngle
 }

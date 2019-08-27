@@ -1,3 +1,6 @@
+var PI = Math.PI;
+var TAU = PI * 2;
+
 function ease(value, target, ease) {
 	return (target - value) / ease;
 }
@@ -28,11 +31,26 @@ function getDistance(o1, o2) {
 	return Math.sqrt(getDistanceRaw(o1, o2));
 }
 
+function getAngle(p1, p2) {
+	return Math.atan2(p1.y - p2.y, p1.x - p2.x);
+}
+
+function getAngleDifference(a1, a2) {
+	return mod((a1 - a2) + PI, TAU) - PI;
+}
+
+function mod(a, n) {
+	return a - Math.floor(a / n) * n;
+}
+
 export {
 	lerp,
 	ease,
 	easeIn,
 	randomRange,
 	getDistanceRaw,
-	getDistance
+	getDistance,
+	getAngle,
+	getAngleDifference,
+	mod
 }

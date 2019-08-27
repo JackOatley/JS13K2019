@@ -1,21 +1,48 @@
 import * as game from "./game.js";
-import * as world from "./world.js";
 import * as keyboard from "./keyboard.js";
-import {nextPalette, currentPalette, toCSS, toGL} from "./palette.js";
-import {ctxCanvas, ctx, gl, worldMatrix} from "./renderer.js";
-import {TextureAtlas} from "./texture_atlas.js";
-import {Sprite} from "./sprite.js";
-import {sprite_sun} from "./sprites/sprite_sun.js";
-import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
-import {spriteRobinVertical} from "./sprites/robin_vertical.js";
-import {spriteTree1} from "./sprites/tree_1.js";
-import {spriteHouse} from "./sprites/house.js";
-import {spriteBoostBar} from "./sprites/boost_bar.js";
-import {spriteBoostPip} from "./sprites/boost_pip.js";
+import {
+	nextPalette,
+	currentPalette,
+	toCSS,
+	toGL
+} from "./palette.js";
+import {
+	ctxCanvas,
+	ctx,
+	gl,
+	worldMatrix
+} from "./renderer.js";
+import {
+	TextureAtlas
+} from "./texture_atlas.js";
+import {
+	Sprite
+} from "./sprite.js";
+import {
+	sprite_sun
+} from "./sprites/sprite_sun.js";
+import {
+	spriteRobinHorizontal
+} from "./sprites/robin_horizontal.js";
+import {
+	spriteRobinVertical
+} from "./sprites/robin_vertical.js";
+import {
+	spriteTree1
+} from "./sprites/tree_1.js";
+import {
+	spriteHouse
+} from "./sprites/house.js";
+import {
+	spriteBoostBar
+} from "./sprites/boost_bar.js";
+import {
+	spriteBoostPip
+} from "./sprites/boost_pip.js";
 
 keyboard.init();
 Sprite.init();
-world.init(ctxCanvas.width, ctxCanvas.height, 10);
+game.init(ctxCanvas.width, ctxCanvas.height, currentPalette);
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
@@ -43,7 +70,6 @@ function update(dt) {
 		nextPalette();
 	}
 
-	world.update(dt);
 	game.update(dt);
 	keyboard.update();
 
@@ -61,11 +87,11 @@ function render() {
 	// Actually draw stuff!
 	Sprite.batchStart();
 	sprite_sun.draw(0, 300, 80, 1, 1, 0, [...currentPalette[2], 255]);
-	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
-	spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
-	spriteTree1.draw(0, 150, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
-	spriteHouse.draw(0, 200, 50, 1, 1, performance.now()/200, [...currentPalette[3], 255]);
-	world.draw(ctx);
+	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	spriteTree1.draw(0, 150, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	spriteHouse.draw(0, 200, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	game.draw(ctx);
 	drawGui();
 	Sprite.batchEnd();
 
@@ -79,10 +105,10 @@ function drawGui() {
 
 	// Boost bar.
 	spriteBoostBar.draw(0, 4, 4, 1, 1, 0, [...currentPalette[3], 255]);
-	var fill = 6;	// Replace this with actual boost value, out of 10.
-	for (var n=0; n<10; n++) {
+	var fill = 6; // Replace this with actual boost value, out of 10.
+	for (var n = 0; n < 10; n++) {
 		var c = (n < fill) ? 0 : 3;
-		spriteBoostPip.draw(0, 8+n*12, 8, 1, 1, 0, [...currentPalette[c], 255]);
+		spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, [...currentPalette[c], 255]);
 	}
 
 }
