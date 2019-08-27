@@ -260,11 +260,25 @@ function getAngle(index) {
 	return DogeMath.getAngle(hill, nextHill);
 }
 
+/**
+ * 100% British engineering!!
+ */
+function JacksAwesomeHillPos(x) {
+	var i = findIndex(x);
+	var a = getHill(i);
+	var b = getHill(i + 1);
+	return [
+		(a.y + b.y) / 2,
+		DogeMath.getAngle(a, b)
+	]
+}
+
 export {
 	init,
 	update,
 	draw,
 	findIndex,
 	getHill,
-	getAngle
+	getAngle,
+	JacksAwesomeHillPos
 }

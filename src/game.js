@@ -26,7 +26,9 @@ function draw(ctx) {
 	var index = world.findIndex(150);
 	var hill = world.getHill(index);
 
-	spriteRobinHorizontal.draw(0, 150, height / 2 - hill.y - 10, 1, 1, 3.14 - world.getAngle(index), [...currentPalette[3], 255]);
+	var [h, a] = world.JacksAwesomeHillPos(150);
+
+	spriteRobinHorizontal.draw(0, 150, height / 2 - h - 10, 1, 1, 3.14 - a, [...currentPalette[3], 255]);
 	world.draw(ctx);
 }
 
