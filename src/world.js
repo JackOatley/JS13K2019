@@ -1,11 +1,7 @@
-import {
-	any
-} from "../lib/keyboard.js";
+import {any} from "../lib/keyboard.js";
 import * as DogeMath from "./dogemath.js";
-import {
-	currentPalette,
-	toCSS
-} from "./palette.js";
+import {currentPalette, toCSS} from "./palette.js";
+import {camera} from "./camera.js";
 
 var drawDebug = false;
 
@@ -14,7 +10,7 @@ var hillWidth;
 var midPoints;
 var width = 0,
 	height = 0;
-var x = 0;
+var x = 0, y = 0;
 
 var minHillDist = 10;
 var maxHillDist = 15;
@@ -28,11 +24,12 @@ var timeSteps = 10;
  * @param {number} _width
  * @param {number} _height
  * @param {number}	numberOfHills
+ * @return {Object} World metrics.
  */
 function init(_width, _height, numberOfHills) {
 	width = _width;
 	height = _height;
-	generateWorld(numberOfHills || 20);
+	return generateWorld(numberOfHills || 20);
 }
 
 function generateWorld(num) {
@@ -54,6 +51,9 @@ function generateWorld(num) {
 	hillWidth = hills[hills.length - 1].x;
 	midPoints = ~~(hills.length / 10);
 	console.log(midPoints);
+	return {
+		width: hillWidth
+	}
 }
 
 /**
@@ -61,15 +61,19 @@ function generateWorld(num) {
  */
 function update(dt) {
 
-	//x -= dt;
+	// Test camera stuff!
 	if (any("ARROWLEFT")) {
-		x -= 5;
+		camera.toX -= 5;
 	}
 	if (any("ARROWRIGHT")) {
-		x += 5;
+		camera.toX += 5;
 	}
 
-	if (x <= -hillWidth) x = 0;
+	//if (x <= -hillWidth) x = 0;
+
+	x = -camera.x;
+	y = -camera.y;
+
 }
 
 function addPoint(x, y) {
@@ -146,10 +150,10 @@ function draw(ctx) {
 		}
 
 		// Build triangle.
-		ctx.moveTo(curr.x + x + (loop * hillWidth), height);
-		ctx.lineTo(curr.x + x + (loop * hillWidth), height / 2 - curr.y);
-		ctx.lineTo(nx + x + (loop * hillWidth), height / 2 - next.y);
-		ctx.lineTo(nx + x + (loop * hillWidth), height);
+		ctx.moveTo(curr.x + x + (loop * hillWidth), height + y);
+		ctx.lineTo(curr.x + x + (loop * hillWidth), height / 2 - curr.y + y);
+		ctx.lineTo(nx + x + (loop * hillWidth), height / 2 - next.y + y);
+		ctx.lineTo(nx + x + (loop * hillWidth), height + y);
 
 		if (nx + x + (loop * hillWidth) > width) {
 			break;
@@ -188,12 +192,12 @@ function draw(ctx) {
 	var next = hills[i];
 	var dir = 1;
 	var loop = -1;
-	ctx.moveTo(next.x + x + (loop * hillWidth), height / 2 - next.y);
+	ctx.moveTo(next.x + x + (loop * hillWidth), height / 2 - next.y + y);
 	i++;
 	while (next !== undefined) {
 		var nx = next.x + x + (loop * hillWidth);
 		if (nx > width) break;
-		ctx.lineTo(nx, height / 2 - next.y);
+		ctx.lineTo(nx, height / 2 - next.y + y);
 		i++;
 		if (i >= hills.length) {
 			i = 0;
@@ -207,11 +211,11 @@ function draw(ctx) {
 	// Draw debug.
 	if (drawDebug) {
 		ctx.beginPath();
-		ctx.moveTo(hills[0].x + x, height);
-		ctx.lineTo(hills[0].x + x, 270);
+		ctx.moveTo(hills[0].x + x, height + y);
+		ctx.lineTo(hills[0].x + x, 270 + y);
 		hills.forEach(i => {
-			ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0));
-			ctx.lineTo(i.x + x, 270);
+			ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0) + y);
+			ctx.lineTo(i.x + x, 270 + y);
 		});
 		ctx.lineWidth = 0.5;
 		ctx.strokeStyle = "rgb(0,0,0,100)";
@@ -220,8 +224,8 @@ function draw(ctx) {
 		var i = findIndex(150);
 		if (i >= 0) {
 			ctx.beginPath();
-			ctx.moveTo(hills[i].x + x, height / 2 - hills[i].y);
-			ctx.lineTo(hills[i].x + x, 270);
+			ctx.moveTo(hills[i].x + x, height / 2 - hills[i].y + y);
+			ctx.lineTo(hills[i].x + x, 270 + y);
 
 			ctx.lineWidth = 0.5;
 			ctx.strokeStyle = "rgb(255,0,0,100)";
