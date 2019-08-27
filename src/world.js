@@ -22,7 +22,7 @@ var maxHillDist = 15;
 var minHillDiff = 10;
 var maxHillDiff = 50;
 
-var timeSteps = 10;
+var timeSteps = 500;
 /**
  *
  * @param {number} _width
@@ -43,16 +43,16 @@ function generateWorld(num) {
 	addPoint(0, 0);
 	var low = true;
 	while (num--) {
-		last.x += ~~DogeMath.randomRange(minHillDist, maxHillDist) * timeSteps;
+		last.x += ~~DogeMath.randomRange(minHillDist, maxHillDist) * 10;
 		last.y = DogeMath.randomRange(
 			(low ? -minHillDiff : minHillDiff),
 			(low ? -maxHillDiff : maxHillDiff));
 		addPoint(last.x, last.y);
 		low = !low;
 	}
-	addPoint(last.x + maxHillDist * timeSteps, 0);
+	addPoint(last.x + maxHillDist * 10, 0);
 	hillWidth = hills[hills.length - 1].x;
-	midPoints = ~~(hills.length / timeSteps);
+	midPoints = ~~(hills.length / 10);
 	console.log(midPoints);
 }
 
@@ -238,7 +238,7 @@ function draw(ctx) {
 function findIndex(posX) {
 	//approximate position.
 	var nx = posX - x;
-	var approx = ~~(nx / (hillWidth / midPoints)) * timeSteps;
+	var approx = ~~(nx / (hillWidth / midPoints)) * 10;
 	//step until you hit the closest point.
 	while (hills[approx] !== undefined && hills[approx].x > nx) approx--;
 	while (hills[approx] !== undefined && hills[approx].x < nx) approx++;
@@ -263,12 +263,13 @@ function getAngle(index) {
 /**
  * 100% British engineering!!
  */
-function JacksAwesomeHillPos(x) {
-	var i = findIndex(x);
-	var a = getHill(i);
-	var b = getHill(i + 1);
+function JacksAwesomeHillPos(px) {
+	var i = findIndex(px);
+	var a = getHill(i - 1);
+	var b = getHill(i);
+	var v = ((px - x) - a.x) / (b.x - a.x);
 	return [
-		(a.y + b.y) / 2,
+		a.y + (b.y - a.y) * v,
 		DogeMath.getAngle(a, b)
 	]
 }
