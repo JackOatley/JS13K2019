@@ -1,4 +1,4 @@
-import {any} from "../lib/keyboard.js";
+import {any} from "././lib/keyboard.js";
 import * as DogeMath from "./dogemath.js";
 import {currentPalette, toCSS} from "./palette.js";
 import {camera} from "./camera.js";

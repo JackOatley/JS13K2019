@@ -1,4 +1,4 @@
-import {Matrix} from "../lib/matrix.js";
+import {Matrix} from "././lib/matrix.js";
 
 // Get contexts.
 export const worldMatrix = new Matrix();

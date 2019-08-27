@@ -1,5 +1,5 @@
 import * as game from "./game.js";
-import * as keyboard from "../lib/keyboard.js";
+import * as keyboard from "././lib/keyboard.js";
 import {
 	nextPalette,
 	currentPalette,
@@ -14,7 +14,7 @@ import {
 } from "./renderer.js";
 import {
 	TextureAtlas
-} from "../lib/texture_atlas.js";
+} from "././lib/texture_atlas.js";
 import {
 	Sprite
 } from "./sprite.js";

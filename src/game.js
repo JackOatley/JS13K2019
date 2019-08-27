@@ -50,6 +50,7 @@ function draw(ctx) {
 	var hill = world.getHill(index);
 
 	var [h, a] = world.JacksAwesomeHillPos(50);
+	camera.toY = -h + 75;
 
 	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
 	spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
