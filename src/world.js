@@ -1,18 +1,22 @@
-import {any} from "./keyboard.js";
+import {
+	any
+} from "./keyboard.js";
 import * as DogeMath from "./dogemath.js";
 import {
 	currentPalette,
 	toCSS
 } from "./palette.js";
 
-var drawDebug = false;
+var drawDebug = true;
 
 var hills = [];
-var width = 0, height = 0;
+var hillWidth;
+var width = 0,
+	height = 0;
 var x = 0;
 
-var minHillDist = 100;
-var maxHillDist = 150;
+var minHillDist = 10;
+var maxHillDist = 15;
 
 var minHillDiff = 10;
 var maxHillDiff = 50;
@@ -32,18 +36,22 @@ function init(_width, _height, numberOfHills) {
 
 function generateWorld(num) {
 	var last = {
-		x: -maxHillDist,
+		x: 0,
 		y: 0
 	};
+	addPoint(0, 0);
 	var low = true;
 	while (num--) {
-		last.x = last.x + DogeMath.randomRange(minHillDist, maxHillDist);
+		last.x += ~~DogeMath.randomRange(minHillDist, maxHillDist) * timeSteps;
 		last.y = DogeMath.randomRange(
 			(low ? -minHillDiff : minHillDiff),
 			(low ? -maxHillDiff : maxHillDiff));
 		addPoint(last.x, last.y);
 		low = !low;
 	}
+	addPoint(last.x + maxHillDist * timeSteps, 0);
+	hillWidth = hills[hills.length - 1].x;
+	console.log(hillWidth);
 }
 
 /**
@@ -52,10 +60,14 @@ function generateWorld(num) {
 function update(dt) {
 
 	//x -= dt;
-	if (any("ARROWLEFT")) { x -= 10; }
-	if (any("ARROWRIGHT")) { x += 10; }
+	if (any("ARROWLEFT")) {
+		x -= 10;
+	}
+	if (any("ARROWRIGHT")) {
+		x += 10;
+	}
 
-	if (x <= -timeSteps * hills.length) x = 0;
+	if (x <= -hillWidth) x = 0;
 }
 
 function addPoint(x, y) {
@@ -121,13 +133,13 @@ function draw(ctx) {
 	ctx.fillStyle = toCSS(currentPalette[2]);
 	ctx.beginPath();
 	var i, next, nx;
-	for (var n=0; n<hills.length; n++) {
+	for (var n = 0; n < hills.length; n++) {
 		i = hills[n];
-		if (n === hills.length-1) {
+		if (n === hills.length - 1) {
 			next = hills[0];
-			nx = i.x + 100;		// Need a way to get this number.
+			nx = i.x + 100; // Need a way to get this number.
 		} else {
-			next = hills[n+1];
+			next = hills[n + 1];
 			nx = next.x;
 		}
 		ctx.moveTo(i.x + x, height);
@@ -135,45 +147,87 @@ function draw(ctx) {
 		ctx.lineTo(nx + x, height / 2 - next.y);
 		ctx.lineTo(nx + x, height);
 	}
-	ctx.fill();
+	//ctx.fill();
 
 	// Draw outline.
 	ctx.strokeStyle = toCSS(currentPalette[0]);
 	ctx.lineWidth = 2;
 	ctx.beginPath();
-	var i, next, nx;
-	for (var n=0; n<hills.length; n++) {
-		i = hills[n];
-		if (n === hills.length-1) {
-			next = hills[0];
-			nx = i.x + 100;		// Need a way to get this number.
-		} else {
-			next = hills[n+1];
-			nx = next.x;
+	// var i, next, nx;
+	// for (var n = 0; n < hills.length; n++) {
+	// 	i = hills[n];
+	// 	if (n === hills.length - 1) {
+	// 		next = hills[0];
+	// 		nx = i.x + 100; // Need a way to get this number.
+	// 	} else {
+	// 		next = hills[n + 1];
+	// 		nx = next.x;
+	// 	}
+	// 	//ctx.moveTo(i.x + x, height);
+	// 	ctx.moveTo(i.x + x, height / 2 - i.y);
+	// 	ctx.lineTo(nx + x, height / 2 - next.y);
+	// 	//ctx.lineTo(nx + x, height);
+	// }
+	var i = 0;
+	var next = hills[i];
+	var dir = 1;
+	ctx.moveTo(next.x + x, height / 2 - next.y);
+	i++;
+	var loop = 0;
+	while (next !== undefined) {
+		var nx = next.x + x + (loop * hillWidth);
+		if (nx > width) break;
+		ctx.lineTo(nx, height / 2 - next.y);
+		i++;
+		if (i >= hills.length) {
+			i = 0;
+			loop++;
 		}
-		//ctx.moveTo(i.x + x, height);
-		ctx.moveTo(i.x + x, height / 2 - i.y);
-		ctx.lineTo(nx + x, height / 2 - next.y);
-		//ctx.lineTo(nx + x, height);
+		next = hills[i];
 	}
+
 	ctx.stroke();
 
 	// Draw debug.
 	if (drawDebug) {
-		ctx.beginPath();
-		ctx.moveTo(hills[0].x + x, height);
-		ctx.lineTo(hills[0].x + x, 270);
-		hills.forEach(i => {
-			ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0));
-			ctx.lineTo(i.x + x, 270);
-		});
-		ctx.lineWidth = 0.5;
-		ctx.strokeStyle = "rgb(0,0,0,100)";
-		ctx.stroke();
+		// ctx.beginPath();
+		// ctx.moveTo(hills[0].x + x, height);
+		// ctx.lineTo(hills[0].x + x, 270);
+		// hills.forEach(i => {
+		// 	ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0));
+		// 	ctx.lineTo(i.x + x, 270);
+		// });
+		var i = collide(50);
+		if (i >= 0) {
+			ctx.beginPath();
+			ctx.moveTo(hills[i].x + x, height / 2 - hills[i].y);
+			ctx.lineTo(hills[i].x + x, 270);
+
+			ctx.lineWidth = 0.5;
+			ctx.strokeStyle = "rgb(0,0,0,100)";
+			ctx.stroke();
+		}
 	}
 
 }
 
+function collide(posX) {
+	var mids = hillWidth / timeSteps;
+	var mid = ~~((posX - x) / mids);
+	var nextMid = mid + 10;
+	var newStep = 10;
+	if (hills[mid] !== undefined && hills[nextMid] !== undefined) {
+		newStep = (hills[nextMid].x - hills[mid].x) / timeSteps;
+	}
+	var other = posX - hills[mid].x;
+	var nx = ~~((other - x) / newStep);
+	var step = hills[nx + mid];
+	if (step === undefined) {
+		console.log(mid, nextMid, nx);
+		return -1;
+	}
+	return ~~nx;
+}
 export {
 	init,
 	update,
