@@ -1,18 +1,26 @@
 import * as world from "./world.js";
-import {
-	spriteRobinHorizontal
-} from "./sprites/robin_horizontal.js";
+import {createItem, drawItems} from "./item.js";
+import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
+import {spriteTree1} from "./sprites/tree_1.js";
+import {currentPalette} from "./palette.js";
 
 var width = 0,
-	height = 0,
-	currentPalette;
+	height = 0;
 
-function init(_width, _height, _currentPalette) {
+function init(_width, _height) {
 	width = _width;
 	height = _height;
-	currentPalette = _currentPalette;
 
 	world.init(width, height, 20);
+
+	for (var n=20; n<600; n+=20) {
+		createItem(spriteTree1, n, 2);
+	}
+
+	for (var n=20; n<600; n+=50) {
+		createItem(spriteTree1, n, 3);
+	}
+
 }
 
 /**
@@ -30,6 +38,7 @@ function draw(ctx) {
 
 	spriteRobinHorizontal.draw(0, 150, height / 2 - h - 10, 1, 1, 3.14 - a, [...currentPalette[3], 255]);
 	world.draw(ctx);
+	drawItems();
 }
 
 export {

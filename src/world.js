@@ -7,7 +7,7 @@ import {
 	toCSS
 } from "./palette.js";
 
-var drawDebug = true;
+var drawDebug = false;
 
 var hills = [];
 var hillWidth;
@@ -22,7 +22,7 @@ var maxHillDist = 15;
 var minHillDiff = 10;
 var maxHillDiff = 50;
 
-var timeSteps = 500;
+var timeSteps = 10;
 /**
  *
  * @param {number} _width
