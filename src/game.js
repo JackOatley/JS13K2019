@@ -13,12 +13,16 @@ function init(_width, _height) {
 
 	world.init(width, height, 20);
 
+	for (var n=20; n<600; n+=5) {
+		createItem(spriteTree1, n, 1, 0.3 + Math.random() * 0.3);
+	}
+
 	for (var n=20; n<600; n+=20) {
-		createItem(spriteTree1, n, 2);
+		createItem(spriteTree1, n, 2, 0.4 + Math.random() * 0.4);
 	}
 
 	for (var n=20; n<600; n+=50) {
-		createItem(spriteTree1, n, 3);
+		createItem(spriteTree1, n, 3, 0.75 + Math.random() * 0.25);
 	}
 
 }
