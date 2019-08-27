@@ -132,22 +132,37 @@ function draw(ctx) {
 	// Draw fill.
 	ctx.fillStyle = toCSS(currentPalette[2]);
 	ctx.beginPath();
-	var i, next, nx;
-	for (var n = 0; n < hills.length; n++) {
-		i = hills[n];
+	var curr, next, nx, n = 0, loop = -1;
+	curr = hills[0];
+	while (curr) {
+		curr = hills[n];
 		if (n === hills.length - 1) {
 			next = hills[0];
-			nx = i.x + 100; // Need a way to get this number.
+			nx = curr.x;
 		} else {
 			next = hills[n + 1];
 			nx = next.x;
 		}
-		ctx.moveTo(i.x + x, height);
-		ctx.lineTo(i.x + x, height / 2 - i.y);
-		ctx.lineTo(nx + x, height / 2 - next.y);
-		ctx.lineTo(nx + x, height);
+
+		// Build triangle.
+		ctx.moveTo(curr.x + x + (loop * hillWidth), height);
+		ctx.lineTo(curr.x + x + (loop * hillWidth), height / 2 - curr.y);
+		ctx.lineTo(nx + x + (loop * hillWidth), height / 2 - next.y);
+		ctx.lineTo(nx + x + (loop * hillWidth), height);
+
+		if (nx + x + (loop * hillWidth) > width) {
+			break;
+		}
+
+		// Loop around to start, but keep relative drawing position.
+		n += 1;
+		if (n >= hills.length) {
+			n = 0;
+			loop += 1;
+		}
+
 	}
-	//ctx.fill();
+	ctx.fill();
 
 	// Draw outline.
 	ctx.strokeStyle = toCSS(currentPalette[0]);
