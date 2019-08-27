@@ -219,9 +219,8 @@ function collide(posX) {
 	if (hills[mid] !== undefined && hills[nextMid] !== undefined) {
 		newStep = (hills[nextMid].x - hills[mid].x) / timeSteps;
 	}
-	var other = posX - hills[mid].x;
-	var nx = ~~((other - x) / newStep);
-	var step = hills[nx + mid];
+	var nx = ~~((posX - x) / newStep);
+	var step = hills[nx];
 	if (step === undefined) {
 		console.log(mid, nextMid, nx);
 		return -1;
