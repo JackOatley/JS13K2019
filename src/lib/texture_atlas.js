@@ -1,4 +1,4 @@
-import {gl} from "./renderer.js";
+import {gl} from "../renderer.js";
 
 /**
  * The TextureAtlas class' purpose is to take many smaller canvases and store

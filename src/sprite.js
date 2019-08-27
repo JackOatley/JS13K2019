@@ -2,7 +2,7 @@
 import {gl, worldMatrix} from "./renderer.js";
 import {Shader} from "./shader.js";
 import {spriteShader} from "./shaders/shader_sprite.js";
-import {TextureAtlas} from "./texture_atlas.js";
+import {TextureAtlas} from "../lib/texture_atlas.js";
 
 const MAX_SPRITES = 1000;
 

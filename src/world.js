@@ -1,6 +1,6 @@
 import {
 	any
-} from "./keyboard.js";
+} from "../lib/keyboard.js";
 import * as DogeMath from "./dogemath.js";
 import {
 	currentPalette,
