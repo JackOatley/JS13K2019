@@ -21,13 +21,21 @@ export class Matrix {
 					0, 0, 0, 1 ]
 		);
 		this.states = [];
+		this.clones = [];
 	}
 
 	/**
 	 * @return {!Matrix}
 	 */
 	save() {
-		this.states.push(this.clone());
+		var state = this.clones[this.states.length];
+		if (state) {
+			state.copy(this);
+		} else {
+			state = this.clone();
+			this.clones[this.states.length] = state;
+		}
+		this.states.push(state);
 		return this;
 	}
 

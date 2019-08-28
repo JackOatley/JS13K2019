@@ -1,36 +1,17 @@
 import * as game from "./game.js";
 import * as keyboard from "././lib/keyboard.js";
-import {
-	nextPalette,
-	currentPalette,
-	toCSS,
-	toGL
-} from "./palette.js";
-import {
-	ctxCanvas,
-	ctx,
-	gl,
-	worldMatrix
-} from "./renderer.js";
-import {
-	TextureAtlas
-} from "././lib/texture_atlas.js";
-import {
-	Sprite
-} from "./sprite.js";
-import {
-	sprite_sun
-} from "./sprites/sprite_sun.js";
-import {
-	spriteBoostBar
-} from "./sprites/boost_bar.js";
-import {
-	spriteBoostPip
-} from "./sprites/boost_pip.js";
+import {nextPalette, currentPalette, toCSS, toGL} from "./palette.js";
+import {ctxCanvas, ctx, gl,} from "./renderer.js";
+import {TextureAtlas} from "././lib/texture_atlas.js";
+import {Sprite} from "./sprite.js";
+import {testMusic} from "./snd/testMusic.js";
 
 keyboard.init();
 Sprite.init();
 game.init(ctxCanvas.width, ctxCanvas.height, currentPalette);
+
+console.log(testMusic);
+//testMusic.play();
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
@@ -74,25 +55,7 @@ function render() {
 
 	// Actually draw stuff!
 	Sprite.batchStart();
-	sprite_sun.draw(0, 300, 80, 1, 1, 0, [...currentPalette[2], 255]);
 	game.draw(ctx);
-	drawGui();
 	Sprite.batchEnd();
-
-}
-
-/**
- * Draws the GUI, duh!
- * @return {void}
- */
-function drawGui() {
-
-	// Boost bar.
-	spriteBoostBar.draw(0, 4, 4, 1, 1, 0, [...currentPalette[3], 255]);
-	var fill = 6; // Replace this with actual boost value, out of 10.
-	for (var n = 0; n < 10; n++) {
-		var c = (n < fill) ? 0 : 3;
-		spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, [...currentPalette[c], 255]);
-	}
 
 }
