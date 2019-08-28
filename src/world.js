@@ -1,4 +1,3 @@
-import {any} from "././lib/keyboard.js";
 import * as DogeMath from "./dogemath.js";
 import {currentPalette, toCSS} from "./palette.js";
 import {camera} from "./camera.js";
@@ -60,20 +59,8 @@ function generateWorld(num) {
  * @param {number} dt DeltaTime
  */
 function update(dt) {
-
-	// Test camera stuff!
-	if (any("ARROWLEFT")) {
-		camera.toX -= 5;
-	}
-	if (any("ARROWRIGHT")) {
-		camera.toX += 5;
-	}
-
-	//if (x <= -hillWidth) x = 0;
-
 	x = -camera.x;
 	y = -camera.y;
-
 }
 
 function addPoint(x, y) {
@@ -266,6 +253,7 @@ function getAngle(index) {
 
 /**
  * 100% British engineering!!
+ * using ukranian solution as a base
  */
 function JacksAwesomeHillPos(px) {
 	var i = findIndex(px);
