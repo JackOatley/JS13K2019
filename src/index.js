@@ -1,27 +1,17 @@
 import * as game from "./game.js";
 import * as keyboard from "././lib/keyboard.js";
-import {
-	nextPalette,
-	currentPalette,
-	toCSS,
-	toGL
-} from "./palette.js";
-import {
-	ctxCanvas,
-	ctx,
-	gl,
-	worldMatrix
-} from "./renderer.js";
-import {
-	TextureAtlas
-} from "././lib/texture_atlas.js";
-import {
-	Sprite
-} from "./sprite.js";
+import {nextPalette, currentPalette, toCSS, toGL} from "./palette.js";
+import {ctxCanvas, ctx, gl,} from "./renderer.js";
+import {TextureAtlas} from "././lib/texture_atlas.js";
+import {Sprite} from "./sprite.js";
+import {testMusic} from "./snd/testMusic.js";
 
 keyboard.init();
 Sprite.init();
 game.init(ctxCanvas.width, ctxCanvas.height, currentPalette);
+
+console.log(testMusic);
+//testMusic.play();
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
