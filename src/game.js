@@ -10,6 +10,7 @@ import * as sprites from "./sprites/sprite_list.js";
 import {currentPalette} from "./palette.js";
 import {camera} from "./camera.js";
 import {worldMatrix} from "./renderer.js";
+import {Sprite} from "./sprite.js";
 
 // Setup a main camera.
 camera.moveTo(240, 135);

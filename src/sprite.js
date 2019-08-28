@@ -4,7 +4,7 @@ import {Shader} from "./shader.js";
 import {spriteShader} from "./shaders/shader_sprite.js";
 import {TextureAtlas} from "././lib/texture_atlas.js";
 
-const MAX_SPRITES = 1000;
+const MAX_SPRITES = 10000;
 
 //
 var spriteShaderProgram = null,
@@ -159,9 +159,75 @@ export class Sprite {
 	/**
 	 *
 	 */
-	static triangle() {
+	static quad(points, color) {
 
-		Sprite.glBatchIndexQuads += 6;
+		//worldMatrix.save();
+		//worldMatrix.translate(x, y, 0);
+		//worldMatrix.rotate(rotation, 0, 0, 1);
+
+		// Get positions of the 4 vertices of the quad.
+		// 1: top-left, 2: top-right, 3: bottom-right, 4: bottom-left.
+		var x1 = points[0];
+		var y1 = points[1];
+		var x2 = points[2];
+		var y2 = points[3];
+		var x3 = points[4];
+		var y3 = points[5];
+		var x4 = points[6];
+		var y4 = points[7];
+
+		// Multiply quad vertex positions by transformMatrix.
+		[x1, y1] = worldMatrix.transposeTransformPoint(x1, y1, 0, 1);
+		[x2, y2] = worldMatrix.transposeTransformPoint(x2, y2, 0, 1);
+		[x3, y3] = worldMatrix.transposeTransformPoint(x3, y3, 0, 1);
+		[x4, y4] = worldMatrix.transposeTransformPoint(x4, y4, 0, 1);
+
+		//
+		//worldMatrix.restore();
+
+		var uvx1 = 0.1;
+		var uvy1 = 0.1;
+		var uvx2 = 0.1;
+		var uvy2 = 0.1;
+
+		// Cache stuff.
+		const i = Sprite.glBatchIndexQuads;
+		const pos = Sprite.glBatchArrayQuads;
+		const tex = Sprite.glBatchArrayQuadsTex;
+		const col = Sprite.glColorsBuffer;
+
+		// Add vertices to vertex buffer.
+		pos[i] = x1;
+		pos[i+1] = y1;
+		pos[i+2] = pos[i+6] = x2;
+		pos[i+3] = pos[i+7] = y2;
+		pos[i+4] = pos[i+10] = x3;
+		pos[i+5] = pos[i+11] = y3;
+		pos[i+8] = x4;
+		pos[i+9] = y4;
+
+		// Add UV coordinates to texture buffer.
+		tex[i] = tex[i+2] = tex[i+6] = uvx1;
+		tex[i+1] = tex[i+5] = tex[i+11] = uvy1;
+		tex[i+3] = tex[i+7] = tex[i+9] = uvy2;
+		tex[i+4] = tex[i+8] = tex[i+10] = uvx2;
+
+		// Color.
+		const s = i * 2;
+		const e = s + 24;
+		const c0 = color[0];
+		const c1 = color[1];
+		const c2 = color[2];
+		const c3 = color[3];
+		for (var c = s; c < e; c += 4) {
+			col[c] = c0;
+			col[c+1] = c1;
+			col[c+2] = c2;
+			col[c+3] = c3;
+		}
+
+		// Increment index for next quad.
+		Sprite.glBatchIndexQuads += 12;
 
 	}
 

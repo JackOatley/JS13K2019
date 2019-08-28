@@ -2,6 +2,7 @@ import {any} from "././lib/keyboard.js";
 import * as DogeMath from "./dogemath.js";
 import {currentPalette, toCSS} from "./palette.js";
 import {camera} from "./camera.js";
+import {Sprite} from "./sprite.js";
 
 var drawDebug = false;
 
@@ -135,8 +136,6 @@ function lerpToPoint(start, target, func) {
 function draw(ctx) {
 
 	// Draw fill.
-	ctx.fillStyle = toCSS(currentPalette[2]);
-	ctx.beginPath();
 	var curr, next, nx, n = 0, loop = -1;
 	curr = hills[0];
 	while (curr) {
@@ -149,11 +148,21 @@ function draw(ctx) {
 			nx = next.x;
 		}
 
-		// Build triangle.
-		ctx.moveTo(curr.x + x + (loop * hillWidth), height + y);
-		ctx.lineTo(curr.x + x + (loop * hillWidth), height / 2 - curr.y + y);
-		ctx.lineTo(nx + x + (loop * hillWidth), height / 2 - next.y + y);
-		ctx.lineTo(nx + x + (loop * hillWidth), height + y);
+		// Fill.
+		Sprite.quad([
+			curr.x + (loop * hillWidth), height / 2 - curr.y,
+			nx + (loop * hillWidth), height / 2 - next.y,
+			curr.x + (loop * hillWidth), height,
+			nx + (loop * hillWidth), height
+		], [...currentPalette[2], 255]);
+
+		// Outline.
+		Sprite.quad([
+			curr.x + (loop * hillWidth), height / 2 - curr.y,
+			nx + (loop * hillWidth), height / 2 - next.y,
+			curr.x + (loop * hillWidth), height / 2 - curr.y + 5,
+			nx + (loop * hillWidth), height / 2 - next.y + 5
+		], [...currentPalette[0], 255]);
 
 		if (nx + x + (loop * hillWidth) > width) {
 			break;
@@ -167,46 +176,6 @@ function draw(ctx) {
 		}
 
 	}
-	ctx.fill();
-
-	// Draw outline.
-	ctx.strokeStyle = toCSS(currentPalette[0]);
-	ctx.lineWidth = 2;
-	ctx.beginPath();
-	// var i, next, nx;
-	// for (var n = 0; n < hills.length; n++) {
-	// 	i = hills[n];
-	// 	if (n === hills.length - 1) {
-	// 		next = hills[0];
-	// 		nx = i.x + 100; // Need a way to get this number.
-	// 	} else {
-	// 		next = hills[n + 1];
-	// 		nx = next.x;
-	// 	}
-	// 	//ctx.moveTo(i.x + x, height);
-	// 	ctx.moveTo(i.x + x, height / 2 - i.y);
-	// 	ctx.lineTo(nx + x, height / 2 - next.y);
-	// 	//ctx.lineTo(nx + x, height);
-	// }
-	var i = 0;
-	var next = hills[i];
-	var dir = 1;
-	var loop = -1;
-	ctx.moveTo(next.x + x + (loop * hillWidth), height / 2 - next.y + y);
-	i++;
-	while (next !== undefined) {
-		var nx = next.x + x + (loop * hillWidth);
-		if (nx > width) break;
-		ctx.lineTo(nx, height / 2 - next.y + y);
-		i++;
-		if (i >= hills.length) {
-			i = 0;
-			loop++;
-		}
-		next = hills[i];
-	}
-
-	ctx.stroke();
 
 	// Draw debug.
 	if (drawDebug) {
