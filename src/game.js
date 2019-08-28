@@ -1,4 +1,5 @@
 import * as world from "./world.js";
+import * as player from "./player.js";
 import {createItem, drawItems} from "./item.js";
 import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
 import {spriteRobinVertical} from "./sprites/robin_vertical.js";
@@ -67,13 +68,6 @@ function draw(ctx) {
 	world.draw(ctx);
 	drawItems();
 	player.draw(ctx);
-	// Draw player.
-	var index = world.findIndex(150);
-	var hill = world.getHill(index);
-	var [h, a] = world.JacksAwesomeHillPos(50);
-	camera.toY = -h + 75;
-	spriteRobinHorizontal.draw(0, 50+camera.x, height / 2 - h - 10, 1, 1, 3.14 - a, [...currentPalette[3], 255]);
-
 	// Restore matrix, and draw the GUI.
 	worldMatrix.restore();
 	drawGui();
