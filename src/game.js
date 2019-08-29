@@ -4,7 +4,7 @@ import { createItem, drawItems } from "./item.js";
 import * as sprites from "./sprites/sprite_list.js";
 import { currentPalette } from "./palette.js";
 import { camera } from "./camera.js";
-import { worldMatrix } from "./renderer.js";
+import {ctxCanvas, worldMatrix} from "./renderer.js";
 
 // Setup a main camera.
 camera.moveTo(240, 135);
@@ -86,6 +86,19 @@ function drawGui() {
 	var c1 = [...currentPalette[3], 255];
 	var c2 = [...currentPalette[0], 255];
 	sprites.font.drawTextShadowed("BOOST", 66-center, 40, c1, c2);
+
+	// Gold text.
+	var txt = "00,000,000";
+	var center = sprites.font.textLength(txt) / 2;
+	var c1 = [...currentPalette[3], 255];
+	var c2 = [...currentPalette[0], 255];
+	sprites.font.drawTextShadowed(txt, ctxCanvas.width-66-center, 10, c1, c2);
+
+	// Gold text.
+	var center = sprites.font.textLength("GOLD") / 2;
+	var c1 = [...currentPalette[3], 255];
+	var c2 = [...currentPalette[0], 255];
+	sprites.font.drawTextShadowed("GOLD", ctxCanvas.width-66-center, 40, c1, c2);
 
 }
 
