@@ -1,17 +1,17 @@
 import * as world from "./world.js";
 import * as player from "./player.js";
-import {createItem, drawItems} from "./item.js";
-import {spriteRobinHorizontal} from "./sprites/robin_horizontal.js";
-import {spriteRobinVertical} from "./sprites/robin_vertical.js";
-import {spriteTree1} from "./sprites/tree_1.js";
-import {spriteHouse} from "./sprites/house.js";
-import {spriteBoostBar} from "./sprites/boost_bar.js";
-import {spriteBoostPip} from "./sprites/boost_pip.js";
+import { createItem, drawItems } from "./item.js";
+import { spriteRobinHorizontal } from "./sprites/robin_horizontal.js";
+import { spriteRobinVertical } from "./sprites/robin_vertical.js";
+import { spriteTree1 } from "./sprites/tree_1.js";
+import { spriteHouse } from "./sprites/house.js";
+import { spriteBoostBar } from "./sprites/boost_bar.js";
+import { spriteBoostPip } from "./sprites/boost_pip.js";
 import * as sprites from "./sprites/sprite_list.js";
-import {currentPalette} from "./palette.js";
-import {camera} from "./camera.js";
-import {worldMatrix} from "./renderer.js";
-import {Sprite} from "./sprite.js";
+import { currentPalette } from "./palette.js";
+import { camera } from "./camera.js";
+import { worldMatrix } from "./renderer.js";
+import { Sprite } from "./sprite.js";
 
 // Setup a main camera.
 camera.moveTo(240, 135);
@@ -23,7 +23,7 @@ function init(_width, _height) {
 	width = _width;
 	height = _height;
 
-	var metrics = world.init(width, height, 20);
+	var metrics = world.init(width, height, 10);
 	player.init(_width, _height);
 
 	for (var n = 20; n < metrics.width; n += 5) {

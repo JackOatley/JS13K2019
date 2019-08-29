@@ -10,12 +10,9 @@ var width = 0,
 	posY = 0,
 	posX = 240,
 	angle = 0,
-	velY = 0,
-	velX = 0,
-	vel = 2,
-	g = 0.098,
-	minVX = 0.10,
-	hillY = 0;
+	vel = 3,
+	g = 0.0098,
+	flying = false;
 /**
  * 
  * @param {world} _world 
@@ -28,15 +25,32 @@ function init(_width, _height) {
 }
 
 function update(dt) {
-	[hillY, angle] = world.JacksAwesomeHillPos(50);
-	camera.toY = -posY + 75;
+	if (posX >= world.hillWidth) {
+		posX = 240;
+		camera.x = 0;
+		camera.cX = 240;
+		camera.toX = 240;
+	}
 
-	if (posY <= hillY) posY = hillY;
-	else velY -= g * dt;
-	if (velX < minVX) velX += g * dt;
+	var [hillY, hillAng] = world.JacksAwesomeHillPos(50);
+
+	if (posY <= hillY) {
+		if (flying && angle < hillAng) {
+			//vel += (hillAng - angle) * 0.1 * dt;
+			console.log(vel, angle, hillAng);
+		}
+		flying = false;
+
+		angle = hillAng;
+		posY = hillY;
+	} else {
+		angle -= g * dt;
+		flying = true;
+	}
+
 
 	posX += Math.cos(3.14 - angle) * vel * dt;
-	posY += Math.sin(3.14 - angle) * vel * dt;
+	posY += Math.sin(3.14 - angle) * -vel * dt;
 
 	camera.toX = posX;
 	camera.toY = - posY + 75;

@@ -1,7 +1,7 @@
 import * as DogeMath from "./dogemath.js";
-import {currentPalette, toCSS} from "./palette.js";
-import {camera} from "./camera.js";
-import {Sprite} from "./sprite.js";
+import { currentPalette, toCSS } from "./palette.js";
+import { camera } from "./camera.js";
+import { Sprite } from "./sprite.js";
 
 var drawDebug = false;
 
@@ -87,9 +87,9 @@ function addPoint(x, y) {
 			x: midX,
 			y: midY
 		}, {
-			x: x,
-			y: y
-		}, d => hills.push(d));
+				x: x,
+				y: y
+			}, d => hills.push(d));
 
 	}
 
@@ -123,12 +123,12 @@ function lerpToPoint(start, target, func) {
 function draw(ctx) {
 
 	// Draw fill.
-	var curr, next, nx, n = 0, loop = -1;
-	curr = hills[0];
+	var curr, next, nx, n = findIndex(0), loop = -1;
+	curr = findIndex(0);
 	while (curr) {
 		curr = hills[n];
 		if (n === hills.length - 1) {
-			next = hills[0];
+			next = findIndex(0);
 			nx = curr.x;
 		} else {
 			next = hills[n + 1];
@@ -161,7 +161,6 @@ function draw(ctx) {
 			n = 0;
 			loop += 1;
 		}
-
 	}
 
 	// Draw debug.
@@ -200,9 +199,13 @@ function findIndex(posX) {
 	var nx = posX - x;
 	var approx = ~~(nx / (hillWidth / midPoints)) * 10;
 	//step until you hit the closest point.
-	while (hills[approx] !== undefined && hills[approx].x > nx) approx--;
-	while (hills[approx] !== undefined && hills[approx].x < nx) approx++;
-	if (hills[approx] === undefined) return -1;
+	while (hills[approx] !== undefined && hills[approx].x > nx) {
+		approx--;
+	}
+	while (hills[approx] !== undefined && hills[approx].x < nx) {
+		approx++;
+	}
+	if (approx >= hills.length) approx -= hills.length;
 	return approx;
 }
 
@@ -242,5 +245,6 @@ export {
 	findIndex,
 	getHill,
 	getAngle,
-	JacksAwesomeHillPos
+	JacksAwesomeHillPos,
+	hillWidth
 }

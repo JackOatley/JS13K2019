@@ -11,7 +11,7 @@ export function init() {
 
 	// Disables right click context menu.
 	window.addEventListener("contextmenu", (e) => {
-		e.preventDefault();
+		//e.preventDefault();
 	}, false);
 
 	// Handle key press.
@@ -20,14 +20,14 @@ export function init() {
 			_pressed[e.key.toUpperCase()] = true;
 		}
 		_down[e.key.toUpperCase()] = true;
-		e.preventDefault();
+		//e.preventDefault();
 	}, false);
 
 	// Handle key release.
 	window.addEventListener("keyup", (e) => {
 		_down[e.key.toUpperCase()] = false;
 		_released[e.key.toUpperCase()] = true;
-		e.preventDefault();
+		//e.preventDefault();
 	}, false);
 
 }
