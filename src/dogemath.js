@@ -15,7 +15,7 @@ function easeIn(start, change, time, duration) {
 /**
  * Generates a random number between the specified range
  * @param {number} min
- * @param {number} max 
+ * @param {number} max
  */
 function randomRange(min, max) {
 	return Math.random() * (max - min) + min;
@@ -43,6 +43,13 @@ function mod(a, n) {
 	return a - Math.floor(a / n) * n;
 }
 
+/**
+ *
+ */
+function wrap(n, e) {
+	return ((n % e) + e) % e;
+}
+
 export {
 	lerp,
 	ease,
@@ -52,5 +59,6 @@ export {
 	getDistance,
 	getAngle,
 	getAngleDifference,
-	mod
+	mod,
+	wrap
 }

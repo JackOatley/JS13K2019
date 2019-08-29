@@ -60,8 +60,8 @@ function generateWorld(num) {
  * @param {number} dt DeltaTime
  */
 function update(dt) {
-	x = -camera.x;
-	y = -camera.y;
+	//x = -camera.x;
+	//y = -camera.y;
 }
 
 function addPoint(x, y) {
@@ -123,12 +123,12 @@ function lerpToPoint(start, target, func) {
 function draw(ctx) {
 
 	// Draw fill.
-	var curr, next, nx, n = findIndex(0), loop = -1;
-	curr = findIndex(0);
+	var curr, next, nx, n = findIndex(-camera.x), loop = -1;
+	curr = hills[n];
 	while (curr) {
 		curr = hills[n];
 		if (n === hills.length - 1) {
-			next = findIndex(0);
+			next = findIndex(-camera.x);
 			nx = curr.x;
 		} else {
 			next = hills[n + 1];
@@ -151,7 +151,7 @@ function draw(ctx) {
 			nx + (loop * hillWidth), height / 2 - next.y + 5
 		], [...currentPalette[0], 255]);
 
-		if (nx + x + (loop * hillWidth) > width) {
+		if (nx + -camera.x + (loop * hillWidth) > width) {
 			break;
 		}
 
@@ -206,10 +206,14 @@ function findIndex(posX) {
 		approx++;
 	}
 	if (approx >= hills.length) approx -= hills.length;
+	if (approx < 1) { approx += hills.length; }
+
+	//console.log(approx);
 	return approx;
 }
 
 function getHill(index) {
+	//console.log(DogeMath.wrap(index, 10));
 	return {
 		x: hills[index].x,
 		y: hills[index].y

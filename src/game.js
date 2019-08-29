@@ -16,19 +16,19 @@ function init(_width, _height) {
 	width = _width;
 	height = _height;
 
-	var metrics = world.init(width, height, 10);
+	var metrics = world.init(width, height, 11);
 	player.init(_width, _height);
 
 	for (var n = 20; n < metrics.width; n += 5) {
-		createItem(spriteTree1, n, 1, 0.3 + Math.random() * 0.2);
+		createItem(sprites.spriteTree1, n, 1, 0.3 + Math.random() * 0.2);
 	}
 
 	for (var n = 20; n < metrics.width; n += 20) {
-		createItem(spriteTree1, n, 2, 0.4 + Math.random() * 0.4);
+		createItem(sprites.spriteTree1, n, 2, 0.4 + Math.random() * 0.4);
 	}
 
 	for (var n = 20; n < metrics.width; n += 50) {
-		createItem(spriteTree1, n, 3, 0.75 + Math.random() * 0.25);
+		createItem(sprites.spriteTree1, n, 3, 0.75 + Math.random() * 0.25);
 	}
 
 }
@@ -53,10 +53,10 @@ function draw(ctx) {
 	worldMatrix.translate(-camera.x, -camera.y, 0);
 
 	// Draw game items.
-	spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
-	spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
-	spriteTree1.draw(0, 150, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
-	spriteHouse.draw(0, 200, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	sprites.spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	sprites.spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	sprites.spriteTree1.draw(0, 150, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	sprites.spriteHouse.draw(0, 200, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
 
 	world.draw(ctx);
 	drawItems();
@@ -74,11 +74,11 @@ function draw(ctx) {
 function drawGui() {
 
 	// Boost bar.
-	spriteBoostBar.draw(0, 4, 4, 1, 1, 0, [...currentPalette[3], 255]);
+	sprites.spriteBoostBar.draw(0, 4, 4, 1, 1, 0, [...currentPalette[3], 255]);
 	var fill = 6; // Replace this with actual boost value, out of 10.
 	for (var n = 0; n < 10; n++) {
 		var c = (n < fill) ? 0 : 3;
-		spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, [...currentPalette[c], 255]);
+		sprites.spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, [...currentPalette[c], 255]);
 	}
 
 }
