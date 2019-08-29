@@ -1,5 +1,7 @@
 import * as world from "./world.js";
 import {currentPalette} from "./palette.js";
+import {camera} from "./camera.js";
+import {wrap} from "./dogemath.js";
 
 /**
  *
@@ -32,6 +34,14 @@ export function drawItems() {
 		item = items[n];
 		c = [...currentPalette[item.color], 255];
 		s = item.scale;
-		item.sprite.draw(0, item.x, 240 / 2 - item.y + 15, s, s, 3.14 - item.a, c);
+
+		// Handle wrapping.
+		var dx = item.x;
+		if (dx-camera.x < -50) { dx += world.hillWidth; }
+		else if (dx-(camera.x+240) > 290) { dx -= world.hillWidth; }
+
+		// Draw
+		item.sprite.draw(0, dx, 240 / 2 - item.y + 15, s, s, 3.14 - item.a, c);
+
 	}
 }

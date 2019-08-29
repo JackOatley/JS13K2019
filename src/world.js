@@ -235,7 +235,7 @@ function JacksAwesomeHillPos(px) {
 	var i = findIndex(px);
 	var a = getHill(i - 1);
 	var b = getHill(i);
-	var v = ((px - x) - a.x) / (b.x - a.x);
+	var v = (px - a.x) / (b.x - a.x);
 	return [
 		a.y + (b.y - a.y) * v,
 		DogeMath.getAngle(a, b)

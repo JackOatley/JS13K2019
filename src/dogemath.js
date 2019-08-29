@@ -1,5 +1,5 @@
-var PI = Math.PI;
-var TAU = PI * 2;
+const PI = Math.PI;
+const TAU = PI * 2;
 
 function ease(value, target, ease) {
 	return (target - value) / ease;
@@ -35,12 +35,22 @@ function getAngle(p1, p2) {
 	return Math.atan2(p1.y - p2.y, p1.x - p2.x);
 }
 
-function getAngleDifference(a1, a2) {
-	return mod((a1 - a2) + PI, TAU) - PI;
-}
-
+/**
+ * @param {!number} a
+ * @param {!number} b
+ * @return {!number}
+ */
 function mod(a, n) {
 	return a - Math.floor(a / n) * n;
+}
+
+/**
+ * @param {!number} a
+ * @param {!number} b
+ * @return {!number}
+ */
+function getAngleDifference(a, b) {
+	return mod((a - b) + PI, TAU) - PI;
 }
 
 /**

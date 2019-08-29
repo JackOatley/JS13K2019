@@ -1,6 +1,6 @@
 import * as world from "./world.js";
 import { any } from "././lib/keyboard.js";
-import * as DogeMath from "./dogemath.js";
+import * as math from "./dogemath.js";
 import { currentPalette, toCSS } from "./palette.js";
 import { camera } from "./camera.js";
 import { spriteRobinHorizontal } from "./sprites/robin_horizontal.js";
@@ -12,7 +12,9 @@ var width = 0,
 	angle = 0,
 	vel = 3,
 	g = 0.0098,
-	flying = false;
+	flying = false,
+	displayAngle = angle;
+
 /**
  *
  * @param {world} _world
@@ -30,6 +32,7 @@ function update(dt) {
 		camera.x -= world.hillWidth;
 		camera.cX -= world.hillWidth;
 		camera.toX -= world.hillWidth;
+		console.log("wrap");
 	}
 
 	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
@@ -48,10 +51,15 @@ function update(dt) {
 		flying = true;
 	}
 
-
+	// Update position.
 	posX += Math.cos(3.14 - angle) * vel * dt;
 	posY += Math.sin(3.14 - angle) * -vel * dt;
 
+	// Update visual rotation.
+	// Makes it look smoother, without physically effecting collisions.
+	displayAngle += math.getAngleDifference(angle, displayAngle) / 2;
+
+	// Move camera.
 	camera.toX = posX + 240;
 	camera.toY = - posY + 135;
 
@@ -59,7 +67,7 @@ function update(dt) {
 }
 
 function draw(ctx) {
-	spriteRobinHorizontal.draw(0, posX, height / 2 - posY, 1, 1, 3.14 - angle, [...currentPalette[3], 255]);
+	spriteRobinHorizontal.draw(0, posX, height / 2 - posY, 1, 1, 3.14 - displayAngle, [...currentPalette[3], 255]);
 }
 
 export {
