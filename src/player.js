@@ -66,8 +66,11 @@ function update(dt) {
 
 }
 
-function draw(ctx) {
-	spriteRobinHorizontal.draw(0, posX, height / 2 - posY, 1, 1, 3.14 - displayAngle, [...currentPalette[3], 255]);
+function draw() {
+	var x = posX;
+	var y = height / 2 - posY;
+	var a = 3.14 - displayAngle;
+	spriteRobinHorizontal.draw(0, x, y, 1, 1, a, [...currentPalette[3], 255]);
 }
 
 export {

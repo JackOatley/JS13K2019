@@ -81,6 +81,12 @@ function drawGui() {
 		sprites.spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, [...currentPalette[c], 255]);
 	}
 
+	// Boost text.
+	var center = sprites.font.textLength("BOOST") / 2;
+	var c1 = [...currentPalette[3], 255];
+	var c2 = [...currentPalette[0], 255];
+	sprites.font.drawTextShadowed("BOOST", 66-center, 40, c1, c2);
+
 }
 
 export {

@@ -5,3 +5,4 @@ export {spriteHouse} from "./house.js";
 export {spriteBoostBar} from "./boost_bar.js";
 export {spriteBoostPip} from "./boost_pip.js";
 export {sprite_sun} from "./sprite_sun.js";
+export {font} from "./font.js";

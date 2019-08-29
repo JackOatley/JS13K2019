@@ -373,3 +373,81 @@ export class SpriteBase64 extends Sprite {
 	}
 
 }
+
+/**
+ * Temporary solution to creating a Sprite from a base64 encoded PNG.
+ * @const
+ */
+export class SpriteSheetBase64 {
+
+	constructor(str, atlas) {
+
+		this.map = {}
+
+		var image = new Image();
+		image.onload = () => {
+
+			Object.keys(atlas).forEach((key) => {
+				var x, y, w, h, coords, canv, cont;
+				coords = atlas[key];
+				x = coords[0];
+				y = coords[1];
+				w = coords[2];
+				h = coords[3];
+				canv = document.createElement("canvas");
+				canv.width = w;
+				canv.height = h;
+				cont = canv.getContext("2d");
+				cont.drawImage(image, x, y, w, h, 0, 0, w, h);
+				this.map[key] = new Sprite(canv, 0, 0);
+			});
+
+		}
+		image.src = "data:image/png;base64," + str;
+
+	}
+
+	/**
+	 *
+	 */
+	draw(key, x, y, sx, sy, r, c) {
+		this.map[key].draw(0, x, y, sx, sy, r, c);
+	}
+
+	/**
+	 *
+	 */
+	drawText(txt, x, y, c) {
+		for (var n=0; n<txt.length; n+=1) {
+			var key = txt[n];
+			if (this.map[key]) {
+				this.map[key].draw(0, x, y, 1, 1, 0, c);
+				x += this.map[key].width + 2;
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	drawTextShadowed(txt, x, y, c1, c2) {
+		this.drawText(txt, x+2, y, c1);
+		this.drawText(txt, x, y+2, c1);
+		this.drawText(txt, x, y, c2);
+	}
+
+	/**
+	 *
+	 */
+	textLength(txt) {
+		var length = 0;
+		for (var n=0; n<txt.length; n+=1) {
+			var key = txt[n];
+			if (this.map[key]) {
+				length += this.map[key].width + 2;
+			}
+		}
+		return length - 2;
+	}
+
+}
