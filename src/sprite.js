@@ -348,6 +348,7 @@ Sprite.glColorsBuffer = new Uint8Array(MAX_SPRITES*24);
 /**
  * Temporary solution to creating a Sprite from a base64 encoded PNG.
  * @const
+ * @extends Sprite
  */
 export class SpriteBase64 extends Sprite {
 
@@ -394,7 +395,7 @@ export class SpriteSheetBase64 {
 				y = coords[1];
 				w = coords[2];
 				h = coords[3];
-				canv = document.createElement("canvas");
+				canv = /**@type {!HTMLCanvasElement}*/ (document.createElement("canvas"));
 				canv.width = w;
 				canv.height = h;
 				cont = canv.getContext("2d");

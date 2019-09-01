@@ -8,7 +8,7 @@ import {testMusic} from "./snd/testMusic.js";
 
 keyboard.init();
 Sprite.init();
-game.init(ctxCanvas.width, ctxCanvas.height, currentPalette);
+game.init(ctxCanvas.width, ctxCanvas.height);
 
 console.log(testMusic);
 //testMusic.play();

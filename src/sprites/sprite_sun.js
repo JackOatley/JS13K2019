@@ -1,13 +1,14 @@
 import {Sprite} from "../sprite.js";
 
+const size = 200;
+
 const canv = /** @type {!HTMLCanvasElement} */ (document.createElement("canvas"));
-canv.width = 120;
-canv.height = 120;
+canv.width = size;
+canv.height = size;
 
 const cont = canv.getContext("2d");
-cont.beginPath();
 cont.fillStyle = "white";
-cont.arc(60, 60, 60, 0, 2 * Math.PI);
+cont.arc(size/2, size/2, size/2, 0, 2 * Math.PI);
 cont.fill();
 
-export const sprite_sun = new Sprite(canv, 60, 60);
+export const sprite_sun = new Sprite(canv, size/2, size/2);

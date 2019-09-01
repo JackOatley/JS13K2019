@@ -17,12 +17,12 @@ var width = 0,
 
 /**
  *
- * @param {world} _world
+ * @param {number} w
+ * @param {number} h
  */
-function init(_width, _height) {
-
-	width = _width;
-	height = _height;
+function init(w, h) {
+	width = w;
+	height = h;
 	[posY, angle] = world.JacksAwesomeHillPos(posX);
 	posY = 50;
 }

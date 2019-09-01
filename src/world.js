@@ -2,6 +2,7 @@ import * as DogeMath from "./dogemath.js";
 import { currentPalette, toCSS } from "./palette.js";
 import { camera } from "./camera.js";
 import { Sprite } from "./sprite.js";
+import { ctx } from "./renderer.js";
 
 var drawDebug = false;
 
@@ -117,10 +118,9 @@ function lerpToPoint(start, target, func) {
 }
 
 /**
- *
- * @param {CanvasRenderingContext2D} ctx
+ * @return {void}
  */
-function draw(ctx) {
+function draw() {
 
 	// Draw fill.
 	var curr, next, nx, n = findIndex(-camera.x), loop = -1;

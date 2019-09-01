@@ -1,5 +1,4 @@
 /**
- * My type constructor - I will be called with the new keyword
  * @constructor
  * @param {Image|HTMLCanvasElement} img
  * @param {number} xOffset
@@ -9,6 +8,12 @@ function Sprite(img, xOffset, yOffset) {};
 Sprite.prototype.width = 0;
 Sprite.prototype.height = 0;
 Sprite.prototype.frames = [];
+
+/**
+ * @constructor
+ * @extends Sprite
+ */
+function SpriteBase64(img, xOffset, yOffset) {};
 
 /**
  * @typedef {{vertex: string, fragment: string}}

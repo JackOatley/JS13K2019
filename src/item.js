@@ -9,17 +9,24 @@ import {wrap} from "./dogemath.js";
 export const items = [];
 
 /**
- * @param {Sprite} sprite
- * @param {number} x
- * @return {Object}
+ * @param {!Sprite|!SpriteBase64} sprite
+ * @param {!number} x
+ * @param {!number} y
+ * @param {!number} colorIndex Color
+ * @param {!number} scale
+ * @return {!Object}
  */
-export function createItem(sprite, x, c, s) {
+export function createItem(sprite, x, y, colorIndex, scale) {
 	const newItem = {}
 	newItem.sprite = sprite;
-	newItem.color = c;
-	newItem.scale = s;
+	newItem.color = colorIndex;
+	newItem.scale = scale;
 	newItem.x = x;
-	[newItem.y, newItem.a] = world.JacksAwesomeHillPos(x);
+	newItem.y = y;
+	newItem.a = 0;
+	if (y === -1) {
+		[newItem.y, newItem.a] = world.JacksAwesomeHillPos(x);
+	}
 	items.push(newItem);
 	return newItem;
 }
