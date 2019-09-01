@@ -24,6 +24,7 @@ function init(_width, _height) {
 	width = _width;
 	height = _height;
 	[posY, angle] = world.JacksAwesomeHillPos(posX);
+	posY = 50;
 }
 
 function update(dt) {
@@ -32,10 +33,10 @@ function update(dt) {
 		camera.x -= world.hillWidth;
 		camera.cX -= world.hillWidth;
 		camera.toX -= world.hillWidth;
-		console.log("wrap");
 	}
 
 	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
+	console.log(hillAng);
 
 	if (posY <= hillY) {
 		if (flying && angle < hillAng) {
@@ -47,7 +48,9 @@ function update(dt) {
 		angle = hillAng;
 		posY = hillY;
 	} else {
+		if(angle > -4)
 		angle -= g * dt;
+		
 		flying = true;
 	}
 
