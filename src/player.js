@@ -23,7 +23,7 @@ var width = 0,
 function init(w, h) {
 	width = w;
 	height = h;
-	[posY, angle] = world.JacksAwesomeHillPos(posX);
+	angle = -3;
 	posY = 50;
 }
 
@@ -36,21 +36,21 @@ function update(dt) {
 	}
 
 	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
-	console.log(hillAng);
 
 	if (posY <= hillY) {
-		if (flying && angle < hillAng) {
-			//vel += (hillAng - angle) * 0.1 * dt;
-			console.log(vel, angle, hillAng);
+		if (flying) {
+			var nextHill = world.getHill(world.findIndex(posX) + 1);
+			// if (hillY > nextHill.y)
+			// 	vel += (angle - hillAng) * 0.1 * dt;
+			//console.log(vel, angle, hillAng);
 		}
 		flying = false;
 
 		angle = hillAng;
 		posY = hillY;
-	} else {
-		if(angle > -4)
-		angle -= g * dt;
-		
+	} else if (posY - hillY >= 0.5) {
+		if (angle > -4)
+			angle -= g * dt;
 		flying = true;
 	}
 

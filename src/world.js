@@ -10,7 +10,8 @@ var hills = [];
 var hillWidth;
 var midPoints;
 var width = 0,
-	height = 0;
+	height = 0,
+	hHeight = 0;
 var x = 0, y = 0;
 
 var minHillDist = 10;
@@ -30,6 +31,7 @@ var timeSteps = 10;
 function init(_width, _height, numberOfHills) {
 	width = _width;
 	height = _height;
+	hHeight = height / 2;
 	return generateWorld(numberOfHills || 20);
 }
 
@@ -121,71 +123,37 @@ function lerpToPoint(start, target, func) {
  * @return {void}
  */
 function draw() {
-
+	if (drawDebug) ctx.beginPath();
 	// Draw fill.
-	var curr, next, nx, n = findIndex(-camera.x), loop = -1;
-	curr = hills[n];
-	while (curr) {
-		curr = hills[n];
-		if (n === hills.length - 1) {
-			next = findIndex(-camera.x);
-			nx = curr.x;
-		} else {
-			next = hills[n + 1];
-			nx = next.x;
-		}
-
-		// Fill.
+	var index = findIndex(camera.x - 60), curr = getHill(index), next = getHill(index + 1);
+	while ((next.x - camera.x) + next.l * hillWidth < width + 10) {
 		Sprite.quad([
-			curr.x + (loop * hillWidth), height / 2 - curr.y,
-			nx + (loop * hillWidth), height / 2 - next.y,
-			curr.x + (loop * hillWidth), height,
-			nx + (loop * hillWidth), height
+			curr.x + curr.l * hillWidth, hHeight - curr.y,
+			next.x + next.l * hillWidth, hHeight - next.y,
+			curr.x + curr.l * hillWidth, height,
+			next.x + next.l * hillWidth, height
 		], [...currentPalette[2], 255]);
-
-		// Outline.
 		Sprite.quad([
-			curr.x + (loop * hillWidth), height / 2 - curr.y,
-			nx + (loop * hillWidth), height / 2 - next.y,
-			curr.x + (loop * hillWidth), height / 2 - curr.y + 5,
-			nx + (loop * hillWidth), height / 2 - next.y + 5
+			curr.x + curr.l * hillWidth, hHeight - curr.y,
+			next.x + next.l * hillWidth, hHeight - next.y,
+			curr.x + curr.l * hillWidth, hHeight - curr.y + 5,
+			next.x + next.l * hillWidth, hHeight - next.y + 5
 		], [...currentPalette[0], 255]);
 
-		if (nx + -camera.x + (loop * hillWidth) > width) {
-			break;
+		if (drawDebug) {
+			ctx.moveTo(curr.x + curr.l * hillWidth - camera.x, hHeight - curr.y - (curr.c ? 10 : 0) - camera.y);
+			ctx.lineTo(curr.x + curr.l * hillWidth - camera.x, height - camera.y);
 		}
 
-		// Loop around to start, but keep relative drawing position.
-		n += 1;
-		if (n >= hills.length) {
-			n = 0;
-			loop += 1;
-		}
+		index++;
+		curr = getHill(index);
+		next = getHill(index + 1);
 	}
 
-	// Draw debug.
 	if (drawDebug) {
-		ctx.beginPath();
-		ctx.moveTo(hills[0].x + x, height + y);
-		ctx.lineTo(hills[0].x + x, 270 + y);
-		hills.forEach(i => {
-			ctx.moveTo(i.x + x, height / 2 - i.y - (i.c ? 10 : 0) + y);
-			ctx.lineTo(i.x + x, 270 + y);
-		});
 		ctx.lineWidth = 0.5;
-		ctx.strokeStyle = "rgb(0,0,0,100)";
+		ctx.strokeStyle = "rgb(255,0,0,100)";
 		ctx.stroke();
-
-		var i = findIndex(150);
-		if (i >= 0) {
-			ctx.beginPath();
-			ctx.moveTo(hills[i].x + x, height / 2 - hills[i].y + y);
-			ctx.lineTo(hills[i].x + x, 270 + y);
-
-			ctx.lineWidth = 0.5;
-			ctx.strokeStyle = "rgb(255,0,0,100)";
-			ctx.stroke();
-		}
 	}
 
 }
@@ -196,33 +164,27 @@ function draw() {
  */
 function findIndex(posX) {
 	//approximate position.
-	var nx = posX - x;
-	var approx = ~~(nx / (hillWidth / midPoints)) * 10;
+	var approx = ~~(posX / (hillWidth / midPoints)) * timeSteps;
 	//step until you hit the closest point.
-	while (hills[approx] !== undefined && hills[approx].x > nx) {
-		approx--;
-	}
-	while (hills[approx] !== undefined && hills[approx].x < nx) {
-		approx++;
-	}
-	if (approx >= hills.length) approx -= hills.length;
-	if (approx < 1) { approx += hills.length; }
-
-	//console.log(approx);
+	while (hills[approx] !== undefined && hills[approx].x > posX) approx--
+	while (hills[approx] !== undefined && hills[approx].x < posX) approx++;
 	return approx;
 }
 
 function getHill(index) {
-	//console.log(DogeMath.wrap(index, 10));
+	let mult = index / hills.length;
+	mult = mult < 0 ? Math.floor(mult) : ~~mult
+	index -= mult * hills.length;
 	return {
 		x: hills[index].x,
-		y: hills[index].y
+		y: hills[index].y,
+		l: mult
 	};
 }
 
 function getAngle(index) {
-	var hill = hills[index];
-	var nextHill = hills[index + 1];
+	var hill = getHill(index);
+	var nextHill = getHill(index + 1);
 	if (hill === undefined || nextHill === undefined) return 0;
 	return DogeMath.getAngle(hill, nextHill);
 }
