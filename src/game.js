@@ -25,15 +25,15 @@ function init(_width, _height) {
 
 	// Trees.
 	for (var n = 20; n < metrics.width; n += 5) {
-		createItem(sprites.spriteTree1, n, -1, 1, 0.3 + Math.random() * 0.2, 0);
+		createItem(sprites.spriteTree1, n, -1, 1, 0.3 + Math.random() * 0.2);
 	}
 
 	for (var n = 20; n < metrics.width; n += 20) {
-		createItem(sprites.spriteTree1, n, -1, 2, 0.4 + Math.random() * 0.4, 0);
+		createItem(sprites.spriteTree1, n, -1, 2, 0.4 + Math.random() * 0.4);
 	}
 
 	for (var n = 20; n < metrics.width; n += 50) {
-		createItem(sprites.spriteTree1, n, -1, 3, 0.75 + Math.random() * 0.25, 0);
+		createItem(sprites.spriteTree1, n, -1, 3, 0.75 + Math.random() * 0.25);
 	}
 
 }
@@ -67,8 +67,8 @@ function draw(ctx) {
 	sprites.spriteHouse.draw(0, 200, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
 
 	drawItems();
-	world.draw(ctx);
-	player.draw(ctx);
+	world.draw();
+	player.draw();
 
 	// Restore matrix, and draw the GUI.
 	worldMatrix.restore();
@@ -82,8 +82,12 @@ function draw(ctx) {
  */
 function drawGui() {
 
+	// Cache colors.
+	var c1 = [...currentPalette[3], 255];
+	var c2 = [...currentPalette[0], 255];
+
 	// Boost bar.
-	sprites.spriteBoostBar.draw(0, 4, 4, 1, 1, 0, [...currentPalette[3], 255]);
+	sprites.spriteBoostBar.draw(0, 4, 4, 1, 1, 0, c1);
 	var fill = 6; // Replace this with actual boost value, out of 10.
 	for (var n = 0; n < 10; n++) {
 		var c = (n < fill) ? 0 : 3;
@@ -92,21 +96,15 @@ function drawGui() {
 
 	// Boost text.
 	var center = sprites.font.textLength("BOOST") / 2;
-	var c1 = [...currentPalette[3], 255];
-	var c2 = [...currentPalette[0], 255];
 	sprites.font.drawTextShadowed("BOOST", 66-center, 40, c1, c2);
 
 	// Gold text.
 	var txt = "00,000,000";
-	var center = sprites.font.textLength(txt) / 2;
-	var c1 = [...currentPalette[3], 255];
-	var c2 = [...currentPalette[0], 255];
+	center = sprites.font.textLength(txt) / 2;
 	sprites.font.drawTextShadowed(txt, ctxCanvas.width-66-center, 10, c1, c2);
 
 	// Gold text.
-	var center = sprites.font.textLength("GOLD") / 2;
-	var c1 = [...currentPalette[3], 255];
-	var c2 = [...currentPalette[0], 255];
+	center = sprites.font.textLength("GOLD") / 2;
 	sprites.font.drawTextShadowed("GOLD", ctxCanvas.width-66-center, 40, c1, c2);
 
 }

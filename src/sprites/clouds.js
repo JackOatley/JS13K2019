@@ -5,7 +5,7 @@ export const cloudsArray = [];
 
 for (var n=0; n<numberOfClouds; n+=1) {
 
-	const canv = /** @type {!HTMLCanvasElement} */ (document.createElement("canvas"));
+	const canv = /**@type {!HTMLCanvasElement}*/ (document.createElement("canvas"));
 	canv.width = 120;
 	canv.height = 120;
 

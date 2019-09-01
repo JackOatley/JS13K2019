@@ -9,10 +9,10 @@ import {wrap} from "./dogemath.js";
 export const items = [];
 
 /**
- * @param {!Sprite} sprite
+ * @param {!Sprite|!SpriteBase64} sprite
  * @param {!number} x
  * @param {!number} y
- * @param {!Array} colorIndex Color
+ * @param {!number} colorIndex Color
  * @param {!number} scale
  * @return {!Object}
  */

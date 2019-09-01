@@ -37,7 +37,7 @@ function getAngle(p1, p2) {
 
 /**
  * @param {!number} a
- * @param {!number} b
+ * @param {!number} n
  * @return {!number}
  */
 function mod(a, n) {

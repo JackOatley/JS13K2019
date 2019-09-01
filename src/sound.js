@@ -31,19 +31,10 @@ var sndClick;
 export class Sound {
 
 	/**
-	 * @param {Object|Array<Object>} track
+	 * @param {Object} track
 	 * @param {number=} number Number of Audio instances to create.
 	 */
 	constructor(track, number=1) {
-
-		// If passed an array of data, return an array of sounds.
-		if (Array.isArray(track)) {
-			const array = [];
-			for(var n=0; n<track.length; n++) {
-				array[n] = Sound.add(track[n]);
-			}
-			return array;
-		}
 
 		// Create a new audio object.
 		this.progress = 0;
