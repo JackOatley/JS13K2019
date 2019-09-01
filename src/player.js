@@ -37,7 +37,7 @@ function update(dt) {
 
 	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
 
-	if (posY <= hillY) {
+	if (posY >= hillY) {
 		if (flying) {
 			var nextHill = world.getHill(world.findIndex(posX) + 1);
 			// if (hillY > nextHill.y)
@@ -48,9 +48,9 @@ function update(dt) {
 
 		angle = hillAng;
 		posY = hillY;
-	} else if (posY - hillY >= 0.5) {
+	} else if (posY - hillY <= 0.5) {
 		if (angle > -4)
-			angle -= g * dt;
+			angle += g * dt;
 		flying = true;
 	}
 
@@ -64,15 +64,15 @@ function update(dt) {
 
 	// Move camera.
 	camera.toX = posX + 240;
-	camera.toY = - posY + 135;
+	camera.toY = posY;
 
 
 }
 
 function draw() {
 	var x = posX;
-	var y = height / 2 - posY;
-	var a = 3.14 - displayAngle;
+	var y = posY;
+	var a = 3.14 + displayAngle;
 	spriteRobinHorizontal.draw(0, x, y, 1, 1, a, [...currentPalette[3], 255]);
 }
 
