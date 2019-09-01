@@ -3,39 +3,40 @@
  */
 export const spriteShader = {
 
-	vertex: `
-		attribute vec2 aSpritePosition;
-		attribute vec2 aTextureCoord;
-		attribute vec4 aColor;
+vertex:
 
-		uniform mat3 uMatrix;
+`attribute vec2 aSpritePosition;
+attribute vec2 aTextureCoord;
+attribute vec4 aColor;
 
-		varying vec2 vTextureCoord;
-		varying vec4 vColor;
+uniform mat3 uMatrix;
 
-		void main() {
-			gl_Position = vec4((uMatrix * vec3(aSpritePosition, 1)).xy, 0, 1);
-			vTextureCoord = aTextureCoord;
-			vColor = aColor;
-		}
-	`,
+varying vec2 vTextureCoord;
+varying vec4 vColor;
 
-	fragment: `
-		precision mediump float;
+void main() {
+	gl_Position = vec4((uMatrix * vec3(aSpritePosition, 1)).xy, 0, 1);
+	vTextureCoord = aTextureCoord;
+	vColor = aColor;
+}`,
 
-		uniform sampler2D uSpriteTexture;
+fragment:
 
-		varying vec2 vTextureCoord;
-		varying vec4 vColor;
+`precision mediump float;
 
-		void main() {
-			vec4 tex = texture2D(uSpriteTexture, vTextureCoord);
-			if (floor(tex.r) > 0.0) {
-				//vec2 uv = floor(5.0 * gl_FragCoord.xy * vec2(240.0 / 135.0, 1.0) / vec2(240.0, 135.0));
-				//gl_FragColor = vec4(vec3(mod(uv.x + uv.y, 2.0)), 1.0);
-				gl_FragColor = vColor;
-			}
-		}
-	`
+uniform sampler2D uSpriteTexture;
+
+varying vec2 vTextureCoord;
+varying vec4 vColor;
+
+void main() {
+	float inside = texture2D(uSpriteTexture, vTextureCoord).r;
+	if (vTextureCoord.x < .0) {
+		inside = 1.0;
+	}
+	if (floor(inside) > .0) {
+		gl_FragColor = vColor;
+	}
+}`
 
 }

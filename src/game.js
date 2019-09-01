@@ -107,6 +107,8 @@ function drawGui() {
 	center = sprites.font.textLength("GOLD") / 2;
 	sprites.font.drawTextShadowed("GOLD", ctxCanvas.width-66-center, 40, c1, c2);
 
+	//sprites.spriteTree1.draw(0, 150, 50, 1, 1, 0, [...currentPalette[3], 255]);
+
 }
 
 /**

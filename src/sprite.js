@@ -185,10 +185,10 @@ export class Sprite {
 		//
 		//worldMatrix.restore();
 
-		var uvx1 = 0.1;
-		var uvy1 = 0.1;
-		var uvx2 = 0.1;
-		var uvy2 = 0.1;
+		var uvx1 = -1;
+		var uvy1 = -1;
+		var uvx2 = -1;
+		var uvy2 = -1;
 
 		// Cache stuff.
 		const i = Sprite.glBatchIndexQuads;
@@ -331,7 +331,6 @@ export class Sprite {
 Sprite.positionLocation = 0;
 Sprite.texcoordLocation = 0;
 Sprite.textureLocation = null;
-Sprite.locColor = 0;
 
 // Buffers.
 Sprite.vertexBuffer = null;
@@ -352,6 +351,9 @@ Sprite.glColorsBuffer = new Uint8Array(MAX_SPRITES*24);
  */
 export class SpriteBase64 extends Sprite {
 
+	/**
+	 *
+	 */
 	constructor(str, xOffset, yOffset) {
 
 		super(null, xOffset, yOffset);
@@ -363,13 +365,42 @@ export class SpriteBase64 extends Sprite {
 		this.isLoaded = false;
 		instances.push(this);
 
-		var image = new Image();
-		image.onload = () => {
-			this.width = image.width;
-			this.height = image.height;
-			this.addFrame(image, 0);
+		this.srcImage = new Image();
+		this.srcImage.onload = () => {
+			this.width = this.srcImage.width;
+			this.height = this.srcImage.height;
+			this.addFrame(this.srcImage, 0);
+			//convertToCompressedFormat(this.srcImage);
 		}
-		image.src = "data:image/png;base64," + str;
+		this.srcImage.src = "data:image/png;base64," + str;
+
+	}
+
+}
+
+/**
+ * Temporary solution to creating a Sprite from a base64 encoded PNG.
+ * @const
+ * @extends Sprite
+ */
+export class SpriteCompressed extends Sprite {
+
+	/**
+	 *
+	 */
+	constructor(str, xOffset, yOffset) {
+
+		super(null, xOffset, yOffset);
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.frames = [];
+		this.isLoaded = false;
+		instances.push(this);
+
+		const canvas = getFromCompressedFormat(str);
+		this.width = canvas.width;
+		this.height = canvas.height;
+		this.addFrame(canvas, 0);
 
 	}
 
@@ -451,4 +482,90 @@ export class SpriteSheetBase64 {
 		return length - 2;
 	}
 
+}
+
+/**
+ *
+ */
+function convertToCompressedFormat(image) {
+	const canvas = document.createElement("canvas");
+	canvas.width = image.width;
+	canvas.height = image.height;
+	const context = canvas.getContext("2d");
+	context.drawImage(image, 0, 0);
+	const imageData = context.getImageData(0, 0, image.width, image.height);
+	const data = imageData.data;
+	const runLengths = [];
+	runLengths.push(image.width, image.height);
+	var val = 0;
+	var length = 0;
+	for (var n=0; n<data.length; n+=4) {
+		if (data[n] === val) {
+			if (length === 255) {
+				if (length === 13 || length === 12) {
+					length = 14;
+				}
+				runLengths.push(length);
+				runLengths.push(0);
+				length = 0;
+			}
+			length++;
+		} else {
+			if (length === 13) {
+				runLengths.push(7);
+				runLengths.push(0);
+				length = 6;
+			}
+			if (length === 12) {
+				runLengths.push(6);
+				runLengths.push(0);
+				length = 6;
+			}
+			if (length === 9) {
+				runLengths.push(5);
+				runLengths.push(0);
+				length = 4;
+			}
+			runLengths.push(length);
+			length = 1;
+			val = data[n];
+		}
+	}
+
+	var str = "";
+	runLengths.forEach(n => {
+		console.log(n, String.fromCharCode(n), String.fromCharCode(n).charCodeAt(0));
+		str += String.fromCharCode(n);
+	});
+
+	//console.log(runLengths, str);
+	//getFromCompressedFormat(str);
+}
+
+/**
+ *
+ */
+function getFromCompressedFormat(str) {
+	const width = str.charCodeAt(0);
+	const height = str.charCodeAt(1);
+	const canvas = document.createElement("canvas");
+	const context = canvas.getContext("2d");
+	canvas.width = width;
+	canvas.height = height;
+	const imageData = context.getImageData(0, 0, width, height);
+	const data = imageData.data;
+	var val = 0;
+	var dh = 0;
+	for (var n=2; n<str.length; n+=1) {
+		var num = str.charCodeAt(n);
+		for (var i=0; i<num; i++) {
+			data[dh++] = val;
+			data[dh++] = val;
+			data[dh++] = val;
+			data[dh++] = 255;
+		}
+		val = Math.abs(val - 255);
+	}
+	context.putImageData(imageData, 0, 0);
+	return canvas;
 }
