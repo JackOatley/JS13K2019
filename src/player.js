@@ -39,22 +39,20 @@ function update(dt) {
 
 	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
 
+	facing = Math.sign(math.getAngleDifference(angle, 270*math.DEG2RAD));
+
 	if (posY <= hillY) {
-		if (flying) {
-			var nextHill = world.getHill(world.findIndex(posX) + 1);
+		//if (flying) {
+			//var nextHill = world.getHill(world.findIndex(posX) + 1);
 			// if (hillY > nextHill.y)
 			// 	vel += (angle - hillAng) * 0.1 * dt;
 			//console.log(vel, angle, hillAng);
-		}
+		//}
 		flying = false;
-
 		angle = hillAng;
 		posY = hillY;
 	} else if (posY - hillY >= 0.5) {
-		//if (angle > -4) {
-			facing = Math.sign(math.getAngleDifference(angle, 270*math.DEG2RAD));
-			angle += g * facing * dt;
-		//}
+		angle += g * facing * dt;
 		flying = true;
 	}
 
