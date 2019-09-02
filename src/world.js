@@ -126,20 +126,19 @@ function draw() {
 	if (drawDebug) ctx.beginPath();
 	// Draw fill.
 	var index = findIndex(camera.x - 60), curr = getHill(index), next = getHill(index + 1);
-	while ((next.x - camera.x) + next.l * hillWidth < width + 10) {
+	while (next.x - camera.x < width + 10) {
 		Sprite.quad([
-			curr.x + curr.l * hillWidth, hHeight - curr.y,
-			next.x + next.l * hillWidth, hHeight - next.y,
-			curr.x + curr.l * hillWidth, height,
-			next.x + next.l * hillWidth, height
+			curr.x, curr.y,
+			next.x, next.y,
+			curr.x, height,
+			next.x, height
 		], currentPalette[2]);
 		Sprite.quad([
-			curr.x + curr.l * hillWidth, hHeight - curr.y,
-			next.x + next.l * hillWidth, hHeight - next.y,
-			curr.x + curr.l * hillWidth, hHeight - curr.y + 5,
-			next.x + next.l * hillWidth, hHeight - next.y + 5
+			curr.x, curr.y,
+			next.x, next.y,
+			curr.x, curr.y + 5,
+			next.x, next.y + 5
 		], currentPalette[0]);
-
 		if (drawDebug) {
 			ctx.moveTo(curr.x + curr.l * hillWidth - camera.x, hHeight - curr.y - (curr.c ? 10 : 0) - camera.y);
 			ctx.lineTo(curr.x + curr.l * hillWidth - camera.x, height - camera.y);
@@ -171,7 +170,11 @@ function findIndex(posX) {
 	return approx;
 }
 
-function getHill(index) {
+/**
+ * Returns Hill with its raw position.
+ * @param {number} index 
+ */
+function getHillRaw(index) {
 	let mult = index / hills.length;
 	mult = mult < 0 ? Math.floor(mult) : ~~mult
 	index -= mult * hills.length;
@@ -179,6 +182,18 @@ function getHill(index) {
 		x: hills[index].x,
 		y: hills[index].y,
 		l: mult
+	};
+}
+
+/**
+ * Returns Hill with its position relative to the world
+ * @param {number} index 
+ */
+function getHill(index) {
+	var hill = getHillRaw(index);
+	return {
+		x: hill.x + hill.l * hillWidth,
+		y: hHeight - hill.y
 	};
 }
 
@@ -210,6 +225,7 @@ export {
 	draw,
 	findIndex,
 	getHill,
+	getHillRaw,
 	getAngle,
 	JacksAwesomeHillPos,
 	hillWidth
