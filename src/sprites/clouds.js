@@ -10,7 +10,7 @@ for (var n=0; n<numberOfClouds; n+=1) {
 	canv.height = 120;
 
 	const cont = canv.getContext("2d");
-	cont.beginPath();
+	//cont.beginPath(); // NOT NEEDED?
 	for (var i=0; i<20; i+=1) {
 		var x = 60 - 40 + Math.random() * 80;
 		var y = 60 - 20 + Math.random() * 40;

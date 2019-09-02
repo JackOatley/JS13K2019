@@ -18,7 +18,7 @@ SoundBoxWorker.onmessage = (e) => {
 			for (var n=1; n<sound.number; n++) {
 				sound.instances[n] = sound.instances[0].cloneNode();
 			}
-			sound.play();
+			//sound.play();
 		}
 	}
 };

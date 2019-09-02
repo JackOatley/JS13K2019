@@ -10,7 +10,6 @@ keyboard.init();
 Sprite.init();
 game.init(ctxCanvas.width, ctxCanvas.height);
 
-console.log(testMusic);
 //testMusic.play();
 
 var tickInterval = 1000 / 60;
