@@ -51,15 +51,15 @@ function update(dt) {
 		angle = hillAng;
 		posY = hillY;
 	} else if (posY - hillY <= 0.5) {
-		angle += g * facing * dt;
+		angle -= g * facing * dt;
 		flying = true;
 	}
 
 	// Control.
 	var boost = vel;
 	sprite = spriteRobinHorizontal;
-	if (keyboard.any("ARROWRIGHT")) { sprite = spriteRobinVertical; angle -= 0.1; }
-	if (keyboard.any("ARROWLEFT")) { sprite = spriteRobinVertical; angle += 0.1; }
+	if (keyboard.any("ARROWRIGHT")) { sprite = spriteRobinVertical; angle += 0.1; }
+	if (keyboard.any("ARROWLEFT")) { sprite = spriteRobinVertical; angle -= 0.1; }
 	if (keyboard.all("ARROWLEFT", "ARROWRIGHT")) { boost *= 2; }
 
 	// Update position.
@@ -72,7 +72,7 @@ function update(dt) {
 
 	// Move camera.
 	camera.toX = posX + Math.cos(3.14 - displayAngle) * 240;
-	camera.toY = (posY + 135) + Math.sin(3.14 - displayAngle) * 200;
+	camera.toY = (posY - 50) + Math.sin(3.14 - displayAngle) * -100;
 
 }
 
