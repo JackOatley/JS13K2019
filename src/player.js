@@ -38,10 +38,9 @@ function update(dt) {
 	}
 
 	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
-
 	facing = Math.sign(math.getAngleDifference(angle, 270*math.DEG2RAD));
 
-	if (posY <= hillY) {
+	if (posY >= hillY) {
 		//if (flying) {
 			//var nextHill = world.getHill(world.findIndex(posX) + 1);
 			// if (hillY > nextHill.y)
@@ -51,16 +50,16 @@ function update(dt) {
 		flying = false;
 		angle = hillAng;
 		posY = hillY;
-	} else if (posY - hillY >= 0.5) {
-		angle += g * facing * dt;
+	} else if (posY - hillY <= 0.5) {
+		angle -= g * facing * dt;
 		flying = true;
 	}
 
 	// Control.
 	var boost = vel;
 	sprite = spriteRobinHorizontal;
-	if (keyboard.any("ARROWRIGHT")) { sprite = spriteRobinVertical; angle -= 0.1; }
-	if (keyboard.any("ARROWLEFT")) { sprite = spriteRobinVertical; angle += 0.1; }
+	if (keyboard.any("ARROWRIGHT")) { sprite = spriteRobinVertical; angle += 0.1; }
+	if (keyboard.any("ARROWLEFT")) { sprite = spriteRobinVertical; angle -= 0.1; }
 	if (keyboard.all("ARROWLEFT", "ARROWRIGHT")) { boost *= 2; }
 
 	// Update position.
@@ -73,15 +72,14 @@ function update(dt) {
 
 	// Move camera.
 	camera.toX = posX + Math.cos(3.14 - displayAngle) * 240;
-	camera.toY = (-posY + 135) + Math.sin(3.14 - displayAngle) * 200;
-
+	camera.toY = (posY - 50) + Math.sin(3.14 - displayAngle) * -100;
 
 }
 
 function draw() {
 	var x = posX;
-	var y = height / 2 - posY;
-	var a = 3.14 - displayAngle;
+	var y = posY;
+	var a = 3.14 + displayAngle;
 	sprite.draw(0, x, y, 1, -facing, a, [...currentPalette[3], 255]);
 }
 
