@@ -207,10 +207,12 @@ function getAngle(index) {
 /**
  * 100% British engineering!!
  * using ukranian solution as a base
+ * @param {number} px
+ * @param {number} facing -1 or 1
  */
-function JacksAwesomeHillPos(px) {
+function JacksAwesomeHillPos(px, facing) {
 	var i = findIndex(px);
-	var a = getHill(i - 1);
+	var a = getHill(i + facing);
 	var b = getHill(i);
 	var v = (px - a.x) / (b.x - a.x);
 	return [

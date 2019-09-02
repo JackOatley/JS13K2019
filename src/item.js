@@ -25,7 +25,7 @@ export function createItem(sprite, x, y, colorIndex, scale) {
 	newItem.y = y;
 	newItem.a = 0;
 	if (y === -1) {
-		[newItem.y, newItem.a] = world.JacksAwesomeHillPos(x);
+		[newItem.y, newItem.a] = world.JacksAwesomeHillPos(x, -1);
 	}
 	items.push(newItem);
 	return newItem;

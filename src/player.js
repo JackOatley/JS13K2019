@@ -30,6 +30,8 @@ function init(w, h) {
 }
 
 function update(dt) {
+
+	// Wrap when going right.
 	if (posX >= world.hillWidth) {
 		posX -= world.hillWidth;
 		camera.x -= world.hillWidth;
@@ -37,7 +39,15 @@ function update(dt) {
 		camera.toX -= world.hillWidth;
 	}
 
-	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX);
+	// Wrap when going left.
+	if (posX < 0) {
+		posX += world.hillWidth;
+		camera.x += world.hillWidth;
+		camera.cX += world.hillWidth;
+		camera.toX += world.hillWidth;
+	}
+
+	var [hillY, hillAng] = world.JacksAwesomeHillPos(posX, facing);
 	facing = Math.sign(math.getAngleDifference(angle, 270*math.DEG2RAD));
 
 	if (posY >= hillY) {
