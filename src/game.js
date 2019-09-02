@@ -51,7 +51,7 @@ function update(dt) {
 function draw(ctx) {
 
 	// Draw the background (sun), before camera is applied to worldMatrix.
-	sprites.sprite_sun.draw(0, 300, 80, 1, 1, 0, [...currentPalette[2], 255]);
+	sprites.sprite_sun.draw(0, 300, 80, 1, 1, 0, currentPalette[2]);
 	drawClouds();
 
 	// Draw clouds.
@@ -61,10 +61,10 @@ function draw(ctx) {
 	worldMatrix.translate(-camera.x, -camera.y, 0);
 
 	// Draw game items.
-	sprites.spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
-	sprites.spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
-	sprites.spriteTree1.draw(0, 150, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
-	sprites.spriteHouse.draw(0, 200, 50, 1, 1, performance.now() / 200, [...currentPalette[3], 255]);
+	sprites.spriteRobinHorizontal.draw(0, 50, 50, 1, 1, performance.now() / 200, currentPalette[3]);
+	sprites.spriteRobinVertical.draw(0, 100, 50, 1, 1, performance.now() / 200, currentPalette[3]);
+	sprites.spriteTree1.draw(0, 150, 50, 1, 1, performance.now() / 200, currentPalette[3]);
+	sprites.spriteHouse.draw(0, 200, 50, 1, 1, performance.now() / 200, currentPalette[3]);
 
 	drawItems();
 	world.draw();
@@ -83,15 +83,15 @@ function draw(ctx) {
 function drawGui() {
 
 	// Cache colors.
-	var c1 = [...currentPalette[3], 255];
-	var c2 = [...currentPalette[0], 255];
+	const c1 = currentPalette[3];
+	const c2 = currentPalette[0];
 
 	// Boost bar.
 	sprites.spriteBoostBar.draw(0, 4, 4, 1, 1, 0, c1);
 	var fill = 6; // Replace this with actual boost value, out of 10.
 	for (var n = 0; n < 10; n++) {
 		var c = (n < fill) ? 0 : 3;
-		sprites.spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, [...currentPalette[c], 255]);
+		sprites.spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, currentPalette[c]);
 	}
 
 	// Boost text.
@@ -134,7 +134,7 @@ function createClouds() {
  */
 function drawClouds() {
 	clouds.forEach(cloud => {
-		var color = [...currentPalette[cloud.color], 255];
+		var color = currentPalette[cloud.color];
 		var scale = (cloud.layer === 2) ? 1 : 0.8;
 		cloud.x -= cloud.layer;
 		while (cloud.x < -cloud.sprite.width) {

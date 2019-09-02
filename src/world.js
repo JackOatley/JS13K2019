@@ -132,14 +132,13 @@ function draw() {
 			next.x, next.y,
 			curr.x, height,
 			next.x, height
-		], [...currentPalette[2], 255]);
+		], currentPalette[2]);
 		Sprite.quad([
 			curr.x, curr.y,
 			next.x, next.y,
 			curr.x, curr.y + 5,
 			next.x, next.y + 5
-		], [...currentPalette[0], 255]);
-
+		], currentPalette[0]);
 		if (drawDebug) {
 			ctx.moveTo(curr.x + curr.l * hillWidth - camera.x, hHeight - curr.y - (curr.c ? 10 : 0) - camera.y);
 			ctx.lineTo(curr.x + curr.l * hillWidth - camera.x, height - camera.y);

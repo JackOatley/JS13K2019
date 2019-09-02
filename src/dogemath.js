@@ -1,5 +1,6 @@
 const PI = Math.PI;
 const TAU = PI * 2;
+export const DEG2RAD = PI / 180;
 
 function ease(value, target, ease) {
 	return (target - value) / ease;

@@ -7,8 +7,27 @@ import {TextureAtlas} from "././lib/texture_atlas.js";
 const MAX_SPRITES = 10000;
 
 //
-var spriteShaderProgram = null,
-	instances = [];
+var spriteShaderProgram = null;
+var instances = [];
+
+// Shader attribute locations.
+var positionLocation = 0;
+var texcoordLocation = 0;
+var textureLocation = 0;
+var colorLocation = 0;
+
+// Buffers.
+var vertexBuffer = null;
+var coordsBuffer = null;
+var colorsBuffer = null;
+
+//
+var atlas = new TextureAtlas();
+var texture = null;
+var glBatchIndexQuads = 0;
+var glBatchArrayQuads = new Float32Array(MAX_SPRITES*12);
+var glBatchArrayQuadsTex = new Float32Array(MAX_SPRITES*12);
+var glColorsBuffer = new Uint8Array(MAX_SPRITES*24);
 
 /**
  * @const
@@ -55,7 +74,7 @@ export class Sprite {
 			0, 0, this.width, this.height
 		);
 
-		var coords = Sprite.atlas.pack(canv);
+		var coords = atlas.pack(canv);
 		this.frames.push({
 			c: coords.c,
 			x: coords.x,
@@ -110,16 +129,16 @@ export class Sprite {
 			return;
 		}
 
-		var uvx1 = frame.x / Sprite.atlas.width;
-		var uvy1 = frame.y / Sprite.atlas.height;
-		var uvx2 = (frame.x + this.width) / Sprite.atlas.width;
-		var uvy2 = (frame.y + this.height) / Sprite.atlas.height;
+		var uvx1 = frame.x / atlas.width;
+		var uvy1 = frame.y / atlas.height;
+		var uvx2 = (frame.x + this.width) / atlas.width;
+		var uvy2 = (frame.y + this.height) / atlas.height;
 
 		// Cache stuff.
-		const i = Sprite.glBatchIndexQuads;
-		const pos = Sprite.glBatchArrayQuads;
-		const tex = Sprite.glBatchArrayQuadsTex;
-		const col = Sprite.glColorsBuffer;
+		const i = glBatchIndexQuads;
+		const pos = glBatchArrayQuads;
+		const tex = glBatchArrayQuadsTex;
+		const col = glColorsBuffer;
 
 		// Add vertices to vertex buffer.
 		pos[i] = x1;
@@ -143,27 +162,24 @@ export class Sprite {
 		const c0 = color[0];
 		const c1 = color[1];
 		const c2 = color[2];
-		const c3 = color[3];
 		for (var c = s; c < e; c += 4) {
 			col[c] = c0;
 			col[c+1] = c1;
 			col[c+2] = c2;
-			col[c+3] = c3;
+			col[c+3] = 255;
 		}
 
 		// Increment index for next quad.
-		Sprite.glBatchIndexQuads += 12;
+		glBatchIndexQuads += 12;
 
 	}
 
 	/**
-	 *
+	 * @param {!Array} points
+	 * @param {!Array} color
+	 * @return {void}
 	 */
 	static quad(points, color) {
-
-		//worldMatrix.save();
-		//worldMatrix.translate(x, y, 0);
-		//worldMatrix.rotate(rotation, 0, 0, 1);
 
 		// Get positions of the 4 vertices of the quad.
 		// 1: top-left, 2: top-right, 3: bottom-right, 4: bottom-left.
@@ -182,19 +198,11 @@ export class Sprite {
 		[x3, y3] = worldMatrix.transposeTransformPoint(x3, y3, 0, 1);
 		[x4, y4] = worldMatrix.transposeTransformPoint(x4, y4, 0, 1);
 
-		//
-		//worldMatrix.restore();
-
-		var uvx1 = -1;
-		var uvy1 = -1;
-		var uvx2 = -1;
-		var uvy2 = -1;
-
 		// Cache stuff.
-		const i = Sprite.glBatchIndexQuads;
-		const pos = Sprite.glBatchArrayQuads;
-		const tex = Sprite.glBatchArrayQuadsTex;
-		const col = Sprite.glColorsBuffer;
+		const i = glBatchIndexQuads;
+		const pos = glBatchArrayQuads;
+		const tex = glBatchArrayQuadsTex;
+		const col = glColorsBuffer;
 
 		// Add vertices to vertex buffer.
 		pos[i] = x1;
@@ -207,10 +215,10 @@ export class Sprite {
 		pos[i+9] = y4;
 
 		// Add UV coordinates to texture buffer.
-		tex[i] = tex[i+2] = tex[i+6] = uvx1;
-		tex[i+1] = tex[i+5] = tex[i+11] = uvy1;
-		tex[i+3] = tex[i+7] = tex[i+9] = uvy2;
-		tex[i+4] = tex[i+8] = tex[i+10] = uvx2;
+		tex[i] = tex[i+2] = tex[i+6] = -1;
+		tex[i+1] = tex[i+5] = tex[i+11] = -1;
+		tex[i+3] = tex[i+7] = tex[i+9] = -1;
+		tex[i+4] = tex[i+8] = tex[i+10] = -1;
 
 		// Color.
 		const s = i * 2;
@@ -218,16 +226,15 @@ export class Sprite {
 		const c0 = color[0];
 		const c1 = color[1];
 		const c2 = color[2];
-		const c3 = color[3];
 		for (var c = s; c < e; c += 4) {
 			col[c] = c0;
 			col[c+1] = c1;
 			col[c+2] = c2;
-			col[c+3] = c3;
+			col[c+3] = 255;
 		}
 
 		// Increment index for next quad.
-		Sprite.glBatchIndexQuads += 12;
+		glBatchIndexQuads += 12;
 
 	}
 
@@ -235,7 +242,7 @@ export class Sprite {
 	 * @return {void}
 	 */
 	static batchStart() {
-		Sprite.glBatchIndexQuads = 0;
+		glBatchIndexQuads = 0;
 	}
 
 	/**
@@ -244,31 +251,31 @@ export class Sprite {
 	static batchEnd() {
 
 		// Avoid drawing an empty array as that spews out warnings.
-		if (!Sprite.glBatchIndexQuads) {
+		if (!glBatchIndexQuads) {
 			return;
 		}
 
 		// Setup the attributes to pull data from our buffers
-		gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
-		gl.bufferSubData(gl.ARRAY_BUFFER, 0, Sprite.glBatchArrayQuads);
-		gl.enableVertexAttribArray(Sprite.positionLocation);
-		gl.vertexAttribPointer(Sprite.positionLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+		gl.bufferSubData(gl.ARRAY_BUFFER, 0, glBatchArrayQuads);
+		gl.enableVertexAttribArray(positionLocation);
+		gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.coordsBuffer);
-		gl.bufferSubData(gl.ARRAY_BUFFER, 0, Sprite.glBatchArrayQuadsTex);
-		gl.enableVertexAttribArray(Sprite.texcoordLocation);
-		gl.vertexAttribPointer(Sprite.texcoordLocation, 2, gl.FLOAT, false, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, coordsBuffer);
+		gl.bufferSubData(gl.ARRAY_BUFFER, 0, glBatchArrayQuadsTex);
+		gl.enableVertexAttribArray(texcoordLocation);
+		gl.vertexAttribPointer(texcoordLocation, 2, gl.FLOAT, false, 0, 0);
 
-		gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.colorsBuffer);
-		gl.bufferSubData(gl.ARRAY_BUFFER, 0, Sprite.glColorsBuffer);
-		gl.enableVertexAttribArray(Sprite.colorLocation);
-		gl.vertexAttribPointer(Sprite.colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorsBuffer);
+		gl.bufferSubData(gl.ARRAY_BUFFER, 0, glColorsBuffer);
+		gl.enableVertexAttribArray(colorLocation);
+		gl.vertexAttribPointer(colorLocation, 4, gl.UNSIGNED_BYTE, true, 0, 0);
 
 		// Draw the quad (2 triangles, 6 vertices).
 		gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 		gl.useProgram(spriteShaderProgram);
-		gl.uniform1i(Sprite.textureLocation, 0);
-		gl.drawArrays(gl.TRIANGLES, 0, Sprite.glBatchIndexQuads/2);
+		gl.uniform1i(textureLocation, 0);
+		gl.drawArrays(gl.TRIANGLES, 0, glBatchIndexQuads/2);
 	}
 
 	/**
@@ -287,62 +294,45 @@ export class Sprite {
 		]);
 
 		//
-		Sprite.atlas.createGLTexture();
-		Sprite.atlas.bind(0);
+		atlas.createGLTexture();
+		atlas.bind(0);
 
 		// Get shader attribute/uniform locations.
-		Sprite.positionLocation = gl.getAttribLocation(spriteShaderProgram, 'aSpritePosition');
-		Sprite.texcoordLocation = gl.getAttribLocation(spriteShaderProgram, 'aTextureCoord');
-		Sprite.colorLocation = gl.getAttribLocation(spriteShaderProgram, 'aColor');
-		Sprite.textureLocation = gl.getUniformLocation(spriteShaderProgram, "uSpriteTexture")
+		positionLocation = gl.getAttribLocation(spriteShaderProgram, 'aSpritePosition');
+		texcoordLocation = gl.getAttribLocation(spriteShaderProgram, 'aTextureCoord');
+		colorLocation = gl.getAttribLocation(spriteShaderProgram, 'aColor');
+		textureLocation = gl.getUniformLocation(spriteShaderProgram, "uSpriteTexture")
 
 		// Initialize vertex buffer.
-		Sprite.vertexBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.vertexBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, Sprite.glBatchArrayQuads, gl.DYNAMIC_DRAW);
+		vertexBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, glBatchArrayQuads, gl.DYNAMIC_DRAW);
 
 		// Initialize coordinates buffer.
-		Sprite.coordsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.coordsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, Sprite.glBatchArrayQuadsTex, gl.DYNAMIC_DRAW);
+		coordsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, coordsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, glBatchArrayQuadsTex, gl.DYNAMIC_DRAW);
 
 		// Initialize color buffer.
-		Sprite.colorsBuffer = gl.createBuffer();
-		gl.bindBuffer(gl.ARRAY_BUFFER, Sprite.colorsBuffer);
-		gl.bufferData(gl.ARRAY_BUFFER, Sprite.glColorsBuffer, gl.DYNAMIC_DRAW);
+		colorsBuffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorsBuffer);
+		gl.bufferData(gl.ARRAY_BUFFER, glColorsBuffer, gl.DYNAMIC_DRAW);
 
 	}
 
 	/**
 	 * @return {boolean}
 	 */
-	static isLoading() {
+	/*static isLoading() {
 		for (var n = 0; n < instances.length; n += 1) {
 			if (!instances[n].isLoaded) {
 				return true;
 			}
 		}
 		return false;
-	}
+	}*/
 
 }
-
-// Shader attribute locations.
-Sprite.positionLocation = 0;
-Sprite.texcoordLocation = 0;
-Sprite.textureLocation = null;
-
-// Buffers.
-Sprite.vertexBuffer = null;
-Sprite.coordsBuffer = null;
-Sprite.colorsBuffer = null;
-
-//
-Sprite.atlas = new TextureAtlas();
-Sprite.texture = null;
-Sprite.glBatchArrayQuads = new Float32Array(MAX_SPRITES*12);
-Sprite.glBatchArrayQuadsTex = new Float32Array(MAX_SPRITES*12);
-Sprite.glColorsBuffer = new Uint8Array(MAX_SPRITES*24);
 
 /**
  * Temporary solution to creating a Sprite from a base64 encoded PNG.
@@ -352,7 +342,9 @@ Sprite.glColorsBuffer = new Uint8Array(MAX_SPRITES*24);
 export class SpriteBase64 extends Sprite {
 
 	/**
-	 *
+	 * @param {string} str
+	 * @param {number} xOffset
+	 * @param {number} yOffset
 	 */
 	constructor(str, xOffset, yOffset) {
 
@@ -412,16 +404,20 @@ export class SpriteCompressed extends Sprite {
  */
 export class SpriteSheetBase64 {
 
-	constructor(str, atlas) {
+	/**
+	 * @param {string} str
+	 * @param {Object} coordsMap
+	 */
+	constructor(str, coordsMap) {
 
 		this.map = {}
 
 		var image = new Image();
 		image.onload = () => {
 
-			Object.keys(atlas).forEach((key) => {
+			Object.keys(coordsMap).forEach((key) => {
 				var x, y, w, h, coords, canv, cont;
-				coords = atlas[key];
+				coords = coordsMap[key];
 				x = coords[0];
 				y = coords[1];
 				w = coords[2];
@@ -502,9 +498,6 @@ function convertToCompressedFormat(image) {
 	for (var n=0; n<data.length; n+=4) {
 		if (data[n] === val) {
 			if (length === 255) {
-				if (length === 13 || length === 12) {
-					length = 14;
-				}
 				runLengths.push(length);
 				runLengths.push(0);
 				length = 0;

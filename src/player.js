@@ -1,9 +1,9 @@
 import * as world from "./world.js";
-import { any } from "././lib/keyboard.js";
+import * as keyboard from "././lib/keyboard.js";
 import * as math from "./dogemath.js";
 import { currentPalette, toCSS } from "./palette.js";
 import { camera } from "./camera.js";
-import { spriteRobinHorizontal } from "./sprites/robin_horizontal.js";
+import { spriteRobinHorizontal, spriteRobinVertical } from "./sprites/sprite_list.js";
 
 var width = 0,
 	height = 0,
@@ -13,7 +13,9 @@ var width = 0,
 	vel = 3,
 	g = 0.0098,
 	flying = false,
-	displayAngle = angle;
+	facing = 1,
+	displayAngle = angle,
+	sprite = spriteRobinHorizontal;
 
 /**
  *
@@ -49,23 +51,31 @@ function update(dt) {
 		angle = hillAng;
 		posY = hillY;
 	} else if (posY - hillY <= 0.5) {
-		if (angle > -4)
-			angle += g * dt;
+		//if (angle > -4) {
+			facing = Math.sign(math.getAngleDifference(angle, 270*math.DEG2RAD));
+			angle += g * facing * dt;
+		//}
 		flying = true;
 	}
 
+	// Control.
+	var boost = vel;
+	sprite = spriteRobinHorizontal;
+	if (keyboard.any("ARROWRIGHT")) { sprite = spriteRobinVertical; angle -= 0.1; }
+	if (keyboard.any("ARROWLEFT")) { sprite = spriteRobinVertical; angle += 0.1; }
+	if (keyboard.all("ARROWLEFT", "ARROWRIGHT")) { boost *= 2; }
+
 	// Update position.
-	posX += Math.cos(3.14 - angle) * vel * dt;
-	posY += Math.sin(3.14 - angle) * -vel * dt;
+	posX += Math.cos(3.14 - angle) * boost * dt;
+	posY += Math.sin(3.14 - angle) * -boost * dt;
 
 	// Update visual rotation.
 	// Makes it look smoother, without physically effecting collisions.
 	displayAngle += math.getAngleDifference(angle, displayAngle) / 2;
 
 	// Move camera.
-	camera.toX = posX + 240;
-	camera.toY = posY;
-
+	camera.toX = posX + Math.cos(3.14 - displayAngle) * 240;
+	camera.toY = (posY + 135) + Math.sin(3.14 - displayAngle) * 200;
 
 }
 
@@ -73,7 +83,7 @@ function draw() {
 	var x = posX;
 	var y = posY;
 	var a = 3.14 + displayAngle;
-	spriteRobinHorizontal.draw(0, x, y, 1, 1, a, [...currentPalette[3], 255]);
+	sprite.draw(0, x, y, 1, -facing, a, [...currentPalette[3], 255]);
 }
 
 export {
