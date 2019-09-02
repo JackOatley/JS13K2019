@@ -130,8 +130,8 @@ function draw() {
 		Sprite.quad([
 			curr.x, curr.y,
 			next.x, next.y,
-			curr.x, height,
-			next.x, height
+			curr.x, height+camera.y+135,
+			next.x, height+camera.y+135
 		], currentPalette[2]);
 		Sprite.quad([
 			curr.x, curr.y,

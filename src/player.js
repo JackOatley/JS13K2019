@@ -72,7 +72,7 @@ function update(dt) {
 
 	// Move camera.
 	camera.toX = posX + Math.cos(3.14 - displayAngle) * 240;
-	camera.toY = (posY - 50) + Math.sin(3.14 - displayAngle) * -100;
+	camera.toY = (posY) + Math.sin(3.14 - displayAngle) * -200;
 
 }
 
