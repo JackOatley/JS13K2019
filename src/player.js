@@ -15,7 +15,8 @@ var width = 0,
 	flying = false,
 	facing = 1,
 	displayAngle = angle,
-	sprite = spriteRobinHorizontal;
+	sprite = spriteRobinHorizontal,
+	energy = 10;
 
 /**
  *
@@ -60,6 +61,7 @@ function update(dt) {
 		flying = false;
 		angle = hillAng;
 		posY = hillY;
+		energy = Math.min(energy + 0.2, 10);
 	} else if (posY - hillY <= 0.5) {
 		angle -= g * facing * dt;
 		flying = true;
@@ -68,9 +70,18 @@ function update(dt) {
 	// Control.
 	var boost = vel;
 	sprite = spriteRobinHorizontal;
-	if (keyboard.any("ARROWRIGHT")) { sprite = spriteRobinVertical; angle += 0.1; }
-	if (keyboard.any("ARROWLEFT")) { sprite = spriteRobinVertical; angle -= 0.1; }
-	if (keyboard.all("ARROWLEFT", "ARROWRIGHT")) { boost *= 2; }
+	if (energy > 0
+	&& keyboard.any("ARROWRIGHT", "ARROWLEFT")
+	&& !keyboard.all("ARROWRIGHT", "ARROWLEFT")) {
+		sprite = spriteRobinVertical;
+		energy -= 0.1;
+		if (keyboard.any("ARROWRIGHT")) {
+			angle += 0.1;
+		}
+		if (keyboard.any("ARROWLEFT")) {
+			angle -= 0.1;
+		}
+	}
 
 	// Update position.
 	posX += Math.cos(3.14 - angle) * boost * dt;
@@ -96,5 +107,6 @@ function draw() {
 export {
 	init,
 	update,
-	draw
+	draw,
+	energy
 }

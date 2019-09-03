@@ -88,15 +88,14 @@ function drawGui() {
 
 	// Boost bar.
 	sprites.spriteBoostBar.draw(0, 4, 4, 1, 1, 0, c1);
-	var fill = 6; // Replace this with actual boost value, out of 10.
 	for (var n = 0; n < 10; n++) {
-		var c = (n < fill) ? 0 : 3;
+		var c = (n < Math.ceil(player.energy)) ? 0 : 3;
 		sprites.spriteBoostPip.draw(0, 8 + n * 12, 8, 1, 1, 0, currentPalette[c]);
 	}
 
 	// Boost text.
-	var center = sprites.font.textLength("BOOST") / 2;
-	sprites.font.drawTextShadowed("BOOST", 66-center, 40, c1, c2);
+	var center = sprites.font.textLength("ENERGY") / 2;
+	sprites.font.drawTextShadowed("ENERGY", 66-center, 40, c1, c2);
 
 	// Gold text.
 	var txt = "00,000,000";
@@ -106,8 +105,6 @@ function drawGui() {
 	// Gold text.
 	center = sprites.font.textLength("GOLD") / 2;
 	sprites.font.drawTextShadowed("GOLD", ctxCanvas.width-66-center, 40, c1, c2);
-
-	//sprites.spriteTree1.draw(0, 150, 50, 1, 1, 0, [...currentPalette[3], 255]);
 
 }
 
