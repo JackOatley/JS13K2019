@@ -52,17 +52,18 @@ export class Sound {
 	}
 
 	/**
-	 * @return {void}
+	 * @return {?Audio}
 	 */
 	play() {
 		if (true) {
 			for (var n=0; n<this.instances.length; n++) {
 				if (this.instances[n].paused) {
 					this.instances[n].play();
-					break;
+					return this.instances[n];
 				}
 			}
 		}
+		return null;
 	}
 
 }

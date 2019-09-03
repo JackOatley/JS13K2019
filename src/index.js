@@ -10,7 +10,12 @@ keyboard.init();
 Sprite.init();
 game.init(ctxCanvas.width, ctxCanvas.height);
 
-//testMusic.play();
+setTimeout(() => {
+	var music = testMusic.play();
+	music.addEventListener("ended", function() {
+		music.play();
+	});
+}, 1000);
 
 var tickInterval = 1000 / 60;
 var lastTick = performance.now();
