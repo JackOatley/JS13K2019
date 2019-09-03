@@ -118,23 +118,6 @@ export class Matrix {
 		var s = Math.sin(a);
 		var t = 1 - c;
 
-		//*
-		return this.rotate2(
-			x * x * t + c,
-			x * y * t - z * s,
-			x * z * t + y * s,
-
-			y * x * t + z * s,
-			y * y * t + c,
-			y * z * t - x * s,
-
-			z * x * t - y * s,
-			z * y * t + x * s,
-			z * z * t + c
-		);
-		//*/
-
-		/*
 		rotationMatrix[0] = x * x * t + c;
 		rotationMatrix[1] = x * y * t - z * s;
 		rotationMatrix[2] = x * z * t + y * s;
@@ -148,7 +131,7 @@ export class Matrix {
 		rotationMatrix[10] = z * z * t + c;
 
 		return this.multiply(rotation);
-		//*/
+
 	}
 
 	/**
@@ -156,29 +139,30 @@ export class Matrix {
 	 * @return {!Matrix}
 	 */
 	multiply(mat) {
-		var a = this[0], b = mat[0], c = window["_ufmat"];
+		const a = this[0];
+		const b = mat[0];
 
-		c[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
-		c[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
-		c[2] = a[0] * b[2] + a[1] * b[6] + a[2] * b[10] + a[3] * b[14];
-		c[3] = a[0] * b[3] + a[1] * b[7] + a[2] * b[11] + a[3] * b[15];
+		tempMatrix[0] = a[0] * b[0] + a[1] * b[4] + a[2] * b[8] + a[3] * b[12];
+		tempMatrix[1] = a[0] * b[1] + a[1] * b[5] + a[2] * b[9] + a[3] * b[13];
+		tempMatrix[2] = a[0] * b[2] + a[1] * b[6] + a[2] * b[10] + a[3] * b[14];
+		tempMatrix[3] = a[0] * b[3] + a[1] * b[7] + a[2] * b[11] + a[3] * b[15];
 
-		c[4] = a[4] * b[0] + a[5] * b[4] + a[6] * b[8] + a[7] * b[12];
-		c[5] = a[4] * b[1] + a[5] * b[5] + a[6] * b[9] + a[7] * b[13];
-		c[6] = a[4] * b[2] + a[5] * b[6] + a[6] * b[10] + a[7] * b[14];
-		c[7] = a[4] * b[3] + a[5] * b[7] + a[6] * b[11] + a[7] * b[15];
+		tempMatrix[4] = a[4] * b[0] + a[5] * b[4] + a[6] * b[8] + a[7] * b[12];
+		tempMatrix[5] = a[4] * b[1] + a[5] * b[5] + a[6] * b[9] + a[7] * b[13];
+		tempMatrix[6] = a[4] * b[2] + a[5] * b[6] + a[6] * b[10] + a[7] * b[14];
+		tempMatrix[7] = a[4] * b[3] + a[5] * b[7] + a[6] * b[11] + a[7] * b[15];
 
-		c[8] = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
-		c[9] = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
-		c[10] = a[8] * b[2] + a[9] * b[6] + a[10] * b[10] + a[11] * b[14];
-		c[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11] * b[15];
+		tempMatrix[8] = a[8] * b[0] + a[9] * b[4] + a[10] * b[8] + a[11] * b[12];
+		tempMatrix[9] = a[8] * b[1] + a[9] * b[5] + a[10] * b[9] + a[11] * b[13];
+		tempMatrix[10] = a[8] * b[2] + a[9] * b[6] + a[10] * b[10] + a[11] * b[14];
+		tempMatrix[11] = a[8] * b[3] + a[9] * b[7] + a[10] * b[11] + a[11] * b[15];
 
-		c[12] = a[12] * b[0] + a[13] * b[4] + a[14] * b[8] + a[15] * b[12];
-		c[13] = a[12] * b[1] + a[13] * b[5] + a[14] * b[9] + a[15] * b[13];
-		c[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
-		c[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
+		tempMatrix[12] = a[12] * b[0] + a[13] * b[4] + a[14] * b[8] + a[15] * b[12];
+		tempMatrix[13] = a[12] * b[1] + a[13] * b[5] + a[14] * b[9] + a[15] * b[13];
+		tempMatrix[14] = a[12] * b[2] + a[13] * b[6] + a[14] * b[10] + a[15] * b[14];
+		tempMatrix[15] = a[12] * b[3] + a[13] * b[7] + a[14] * b[11] + a[15] * b[15];
 
-		[window["_ufmat"], this[0]] = [this[0], window["_ufmat"]];
+		[tempMatrix, this[0]] = [this[0], tempMatrix];
 
 		return this;
 	}
@@ -247,59 +231,11 @@ export class Matrix {
 
 }
 
-/**
- * @param {number} takes Number of arguments the function takes.
- * @param {!Array} changes Matrix indices effected by arguments.
- * @return {function(...number)}
- * @example
- * preMultiply(3, [3, 7, 11]);
- */
-function preMultiply(takes, changes) {
-	var varNames = "defghijkl";						// Argument names.
-	var b = "1000010000100001".split("");			// Matrix mapped to numbers/arguments.
-	changes.forEach((i,n) => b[i] = varNames[n]);	// Impose arguments onto matrix.
-
-	// This function is used to sift out unecessary multiplications.
-	function comb(x, y) {
-		return (b[y] == 0) ? `` : (b[y] == 1) ? `a[${x}]` : `a[${x}]*${b[y]}`;
-	}
-
-	var fnBody = ``;
-	for (var n=0; n<16; n++) {
-		var o1 = ~~(n / 4) * 4;
-		var o2 = n - o1;
-
-		//
-		var summation = "", s, o;
-		for (o=0; o<4; o++) {
-			s = comb(o1+o, o2+o*4);
-			summation += s ? summation ? `+${s}` : s : ``;
-		}
-
-		// Add this line to function body.
-		fnBody += `c[${n}]=${summation};\n`;
-
-	}
-
-	//
-	return new Function(...varNames.slice(0, takes),
-		`var a=this[0],c=window["_ufmat"];${fnBody}
-		[window["_ufmat"],this[0]]=[this[0],window["_ufmat"]];
-		return this;`
-	);
-
-}
-
 // Reusable matrices.
-var translation = new Matrix(),
-	rotation = new Matrix(),
-	scaling = new Matrix(),
-	translationMatrix = translation[0],
-	rotationMatrix = rotation[0],
-	scalingMatrix = scaling[0];
-
-window["_ufmat"] = (new Matrix())[0];
-
-Matrix.prototype.translate = preMultiply(3, [3, 7, 11]);
-Matrix.prototype.scale = preMultiply(3, [0, 5, 10]);
-Matrix.prototype.rotate2 = preMultiply(9, [0, 1, 2, 4, 5, 6, 8, 9, 10]);
+const translation = new Matrix();
+const rotation = new Matrix();
+const scaling = new Matrix();
+const translationMatrix = translation[0];
+const rotationMatrix = rotation[0];
+const scalingMatrix = scaling[0];
+var tempMatrix = (new Matrix())[0];
