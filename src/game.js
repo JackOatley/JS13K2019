@@ -25,14 +25,17 @@ function init(_width, _height) {
 
 	// Trees.
 	for (var n = 20; n < metrics.width; n += 5) {
+		n += Math.random() * 20;
 		createItem(sprites.spriteTree1, n, -1, 1, 0.3 + Math.random() * 0.2);
 	}
 
-	for (var n = 20; n < metrics.width; n += 20) {
+	for (var n = 20; n < metrics.width; n += 10) {
+		n += Math.random() * 40;
 		createItem(sprites.spriteTree1, n, -1, 2, 0.4 + Math.random() * 0.4);
 	}
 
-	for (var n = 20; n < metrics.width; n += 50) {
+	for (var n = 20; n < metrics.width; n += 20) {
+		n += Math.random() * 160;
 		createItem(sprites.spriteTree1, n, -1, 3, 0.75 + Math.random() * 0.25);
 	}
 
