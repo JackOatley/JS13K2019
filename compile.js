@@ -15,4 +15,10 @@ exec(cmd, function (error, stdout, stderr) {
 	console.log(stdout);
 	console.log(stderr);
 	console.log(error);
+	// AUTOZIP
+	/*exec(`advzip -a bin/index.zip bin/index.html -i 1000 -4`, function (error, stdout, stderr) {
+		console.log(stdout);
+		console.log(stderr);
+		console.log(error);
+	});*/
 });
