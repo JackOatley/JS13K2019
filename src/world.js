@@ -5,7 +5,7 @@ import { Sprite } from "./sprite.js";
 import { ctx } from "./renderer.js";
 
 var drawDebug = false;
-
+const metrics = {};
 var hills = [];
 var hillWidth;
 var midPoints;
@@ -21,6 +21,7 @@ var minHillDiff = 10;
 var maxHillDiff = 50;
 
 var timeSteps = 10;
+
 /**
  *
  * @param {number} _width
@@ -32,7 +33,7 @@ function init(_width, _height, numberOfHills) {
 	width = _width;
 	height = _height;
 	hHeight = height / 2;
-	return generateWorld(numberOfHills || 20);
+	generateWorld(numberOfHills || 20);
 }
 
 function generateWorld(num) {
@@ -54,9 +55,7 @@ function generateWorld(num) {
 	hillWidth = hills[hills.length - 1].x;
 	midPoints = ~~(hills.length / 10);
 	console.log(midPoints);
-	return {
-		width: hillWidth
-	}
+	metrics.width = hillWidth;
 }
 
 /**
@@ -230,5 +229,6 @@ export {
 	getHillRaw,
 	getAngle,
 	JacksAwesomeHillPos,
-	hillWidth
+	hillWidth,
+	metrics
 }

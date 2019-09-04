@@ -6,4 +6,5 @@ export {spriteBoostBar} from "./boost_bar.js";
 export {spriteBoostPip} from "./boost_pip.js";
 export {sprite_sun} from "./sprite_sun.js";
 export {cloudsArray} from "./clouds.js";
+export {coin} from "./coin.js";
 export {font} from "./font.js";

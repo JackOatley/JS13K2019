@@ -16,7 +16,8 @@ var width = 0,
 	facing = 1,
 	displayAngle = angle,
 	sprite = spriteRobinHorizontal,
-	energy = 10;
+	energy = 10,
+	gold = 0;
 
 /**
  *
@@ -97,6 +98,16 @@ function update(dt) {
 
 }
 
+/**
+ *
+ */
+function addGold(n) {
+	gold += n;
+}
+
+/**
+ *
+ */
 function draw() {
 	var x = posX;
 	var y = posY;
@@ -108,5 +119,9 @@ export {
 	init,
 	update,
 	draw,
-	energy
+	energy,
+	gold,
+	posX as x,
+	posY as y,
+	addGold
 }

@@ -11,3 +11,20 @@ export function buildWorker(fn) {
 		type: "application/javascript"
 	})));
 }
+
+/**
+ *
+ */
+export function removeFromArray(item, array) {
+	var index = array.indexOf(item);
+	if (index !== -1) {
+		array.splice(index, 1);
+	}
+}
+
+/**
+ *
+ */
+export function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}

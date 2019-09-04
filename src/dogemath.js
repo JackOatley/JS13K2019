@@ -22,14 +22,14 @@ function randomRange(min, max) {
 	return Math.random() * (max - min) + min;
 }
 
-function getDistanceRaw(o1, o2) {
-	var x = o1.x - o2.x;
-	var y = o1.y - o2.y;
+function getDistanceSquared(x1, y1, x2, y2) {
+	var x = x1 - x2;
+	var y = y1 - y2;
 	return x * x + y * y;
 }
 
-function getDistance(o1, o2) {
-	return Math.sqrt(getDistanceRaw(o1, o2));
+function getDistance(x1, y1, x2, y2) {
+	return Math.sqrt(getDistanceSquared(x1, y1, x2, y2));
 }
 
 function getAngle(p1, p2) {
@@ -66,7 +66,7 @@ export {
 	ease,
 	easeIn,
 	randomRange,
-	getDistanceRaw,
+	getDistanceSquared,
 	getDistance,
 	getAngle,
 	getAngleDifference,
