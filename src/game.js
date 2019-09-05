@@ -26,6 +26,7 @@ function init(width, height) {
 	//
 	createClouds();
 	createTrees();
+	createNottingham();
 
 	//
 	function coinDrawing(x, y) {
@@ -73,6 +74,14 @@ function draw(ctx) {
 	worldMatrix.save();
 	worldMatrix.scale(1/camera.zoom, 1/camera.zoom, 1);
 	worldMatrix.translate(-camera.x, -camera.y, 0);
+
+	//
+	const c1 = currentPalette[2];
+	const c2 = currentPalette[0];
+	var center = sprites.font.textLength("Nottingham") / 2;
+	var [y] = world.JacksAwesomeHillPos(140-center, -1);
+	sprites.font.drawTextShadowed("Nottingham", 140-center, y-120, c1, c2);
+	sprites.font.drawTextShadowed("Nottingham", 140-center+world.hillWidth, y-120, c1, c2);
 
 	// Draw game.
 	drawItems();
@@ -166,6 +175,27 @@ function createTrees() {
 	for (var n = 20; n < world.metrics.width; n += 20) {
 		n += Math.random() * 160;
 		createItem(sprites.spriteTree1, n, -1, 3, 0.75 + Math.random() * 0.25);
+	}
+}
+
+/**
+ *
+ */
+function createNottingham() {
+	for (var n = 0; n < 240; n += 10) {
+		n += Math.random() * 5;
+		var spr = Math.round(Math.random()) ? sprites.spriteHouse: sprites.tower;
+		createItem(spr, n, -1, 0, 0.4 + Math.random() * 0.6);
+	}
+	for (var n = 20; n < 220; n += 12) {
+		n += Math.random() * 10;
+		var spr = Math.round(Math.random()*2) ? sprites.spriteHouse: sprites.tower;
+		createItem(spr, n, -1, 2, 0.6 + Math.random() * 0.4);
+	}
+	for (var n = 40; n < 200; n += 14) {
+		n += Math.random() * 20;
+		var spr = Math.round(Math.random()*3) ? sprites.spriteHouse : sprites.tower;
+		createItem(spr, n, -1, 3, 0.8 + Math.random() * 0.2);
 	}
 }
 
