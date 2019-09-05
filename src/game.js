@@ -71,6 +71,7 @@ function draw(ctx) {
 
 	// Setup camera.
 	worldMatrix.save();
+	worldMatrix.scale(1/camera.zoom, 1/camera.zoom, 1);
 	worldMatrix.translate(-camera.x, -camera.y, 0);
 
 	// Draw game.

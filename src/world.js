@@ -122,15 +122,17 @@ function lerpToPoint(start, target, func) {
  * @return {void}
  */
 function draw() {
-	if (drawDebug) ctx.beginPath();
+	//if (drawDebug) ctx.beginPath();
+
 	// Draw fill.
+	var ch = camera.y + 135 * (camera.zoom * 2);
 	var index = findIndex(camera.x - 60), curr = getHill(index), next = getHill(index + 1);
-	while (next.x - camera.x < width + 10) {
+	while (next.x - camera.x < width * camera.zoom + 10) {
 		Sprite.quad([
 			curr.x, curr.y,
 			next.x, next.y,
-			curr.x, height+camera.y+135,
-			next.x, height+camera.y+135
+			curr.x, height+ch,
+			next.x, height+ch
 		], currentPalette[2]);
 		Sprite.quad([
 			curr.x, curr.y,
@@ -138,21 +140,22 @@ function draw() {
 			curr.x, curr.y + 5,
 			next.x, next.y + 5
 		], currentPalette[0]);
-		if (drawDebug) {
-			ctx.moveTo(curr.x + curr.l * hillWidth - camera.x, hHeight - curr.y - (curr.c ? 10 : 0) - camera.y);
-			ctx.lineTo(curr.x + curr.l * hillWidth - camera.x, height - camera.y);
-		}
+
+		//if (drawDebug) {
+			//ctx.moveTo(curr.x + curr.l * hillWidth - camera.x, hHeight - curr.y - (curr.c ? 10 : 0) - camera.y);
+			//ctx.lineTo(curr.x + curr.l * hillWidth - camera.x, height - camera.y);
+		//}
 
 		index++;
 		curr = getHill(index);
 		next = getHill(index + 1);
 	}
 
-	if (drawDebug) {
-		ctx.lineWidth = 0.5;
-		ctx.strokeStyle = "rgb(255,0,0,100)";
-		ctx.stroke();
-	}
+	//if (drawDebug) {
+		//ctx.lineWidth = 0.5;
+		//ctx.strokeStyle = "rgb(255,0,0,100)";
+		//ctx.stroke();
+	//}
 
 }
 

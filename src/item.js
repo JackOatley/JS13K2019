@@ -54,7 +54,7 @@ export function drawItems() {
 		// Handle wrapping.
 		var dx = item.x;
 		if (dx - camera.x < -50) { dx += world.hillWidth; }
-		else if (dx - (camera.x + 240) > 290) { dx -= world.hillWidth; }
+		else if (dx - (camera.x + 240 * (1+camera.zoom)) > 290) { dx -= world.hillWidth; }
 
 		// Draw
 		if (item.sprite instanceof Sprite) {

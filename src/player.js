@@ -93,8 +93,16 @@ function update(dt) {
 	displayAngle += math.getAngleDifference(angle, displayAngle) / 2;
 
 	// Move camera.
-	camera.toX = posX + Math.cos(3.14 - displayAngle) * 240;
-	camera.toY = (posY) + Math.sin(3.14 - displayAngle) * -200;
+	if (!isNaN((1 + (hillY - posY) / 400))) {	// Hack, because hillY can be undefined aparently!
+		camera.zoom = (1 + (hillY - posY) / 400);
+	}
+	camera.toX = posX + Math.cos(3.14 - displayAngle) * 240 / camera.zoom;
+	if (hillY) {
+		camera.toY = Math.min(
+			hillY,
+			posY + Math.sin(3.14 - displayAngle) * -200 / camera.zoom
+		);
+	}
 
 }
 
