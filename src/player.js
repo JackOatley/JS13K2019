@@ -53,12 +53,18 @@ function update(dt) {
 	facing = Math.sign(math.getAngleDifference(angle, 270*math.DEG2RAD));
 
 	if (posY >= hillY) {
-		//if (flying) {
+		if (flying) {
 			//var nextHill = world.getHill(world.findIndex(posX) + 1);
 			// if (hillY > nextHill.y)
 			// 	vel += (angle - hillAng) * 0.1 * dt;
-			//console.log(vel, angle, hillAng);
-		//}
+			let diff = math.getAngleDifference(angle, hillAng);
+			if (diff <= 0.5) {
+				console.log("Perfect landing!");
+			}
+			else {
+				console.log("Bodged landing!");
+			}
+		}
 		flying = false;
 		angle = hillAng;
 		posY = hillY;
