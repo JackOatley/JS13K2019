@@ -5,6 +5,7 @@ import {ctxCanvas, ctx, gl,} from "./renderer.js";
 import {TextureAtlas} from "././lib/texture_atlas.js";
 import {Sprite} from "./sprite.js";
 import {testMusic} from "./snd/testMusic.js";
+import * as coil from "./lib/coil.js";
 
 keyboard.init();
 Sprite.init();
@@ -39,7 +40,8 @@ function update(dt) {
 	}
 
 	// Palette swapping.
-	if (keyboard.pressed("Q")) {
+	coil.update();
+	if (coil.isSubscriber && keyboard.pressed("Q")) {
 		nextPalette();
 	}
 
