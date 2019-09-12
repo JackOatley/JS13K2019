@@ -13,7 +13,7 @@ var width = 0,
 	vel = 3,
 	g = 0.0098,
 	flying = false,
-	facing = 1,
+	facing = -1,
 	displayAngle = angle,
 	sprite = spriteRobinHorizontal,
 	energy = 10,
@@ -28,7 +28,7 @@ function init(w, h) {
 	width = w;
 	height = h;
 	angle = -3;
-	posY = 50;
+	posY = world.JacksAwesomeHillPos(posX, facing)[0];
 }
 
 function update(dt) {

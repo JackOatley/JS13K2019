@@ -1,4 +1,5 @@
 import * as game from "./game.js";
+import * as splash from "./splash.js";
 import * as keyboard from "././lib/keyboard.js";
 import {nextPalette, currentPalette, toCSS, toGL} from "./palette.js";
 import {ctxCanvas, ctx, gl,} from "./renderer.js";
@@ -10,6 +11,8 @@ import * as coil from "./lib/coil.js";
 keyboard.init();
 Sprite.init();
 game.init(ctxCanvas.width, ctxCanvas.height);
+
+var state = "splash";
 
 setTimeout(() => {
 	var music = testMusic.play();
@@ -45,7 +48,20 @@ function update(dt) {
 		nextPalette();
 	}
 
-	game.update(dt);
+	switch (state) {
+
+		case ("splash"):
+			if (keyboard.any("ARROWUP", "ARROWDOWN", "ARROWLEFT", "ARROWRIGHT")) {
+				state = "game";
+			}
+			break;
+
+		default:
+			game.update(dt);
+			break;
+
+	}
+
 	keyboard.update();
 
 }
@@ -61,7 +77,19 @@ function render() {
 
 	// Actually draw stuff!
 	Sprite.batchStart();
-	game.draw(ctx);
+
+	switch (state) {
+
+		case ("splash"):
+			splash.draw();
+			break;
+
+		default:
+			game.draw();
+			break;
+
+	}
+
 	Sprite.batchEnd();
 
 }
